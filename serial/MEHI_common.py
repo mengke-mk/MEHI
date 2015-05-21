@@ -27,7 +27,7 @@ def exeTime(func):
     return wraper
 
 def showsize(obj, name = ''):
-     '''
+    '''
     Usage:
      - show the size of a object
      - e.g. showsize(img_stack, '1-L-Red.tif')

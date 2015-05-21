@@ -19,7 +19,6 @@ class Registration:
         self.imgB = imgB
         self.H = self.generate_H(imgA, imgB)
     
-    @exeTime
     def generate_H(self, imgA, imgB):
         '''
         Usage:
@@ -46,7 +45,7 @@ class Registration:
         return -IAB
     
     def PV_interpolation(self, H ,p, q):
-       '''
+        '''
         Usage:
          - update the grey level histogram
         '''
@@ -76,7 +75,7 @@ class Registration:
         E = np.array([[1, 0, 0], [hy, 1 , 0], [0, 0, 1]])
         F = np.dot(np.dot(A,B),C)
         return np.dot(np.dot(F,D),E)
-   
+    
     @exeTime
     def update(self, vec):
         imgA, imgB, H = self.imgA, self.imgB, self.H
@@ -92,7 +91,7 @@ class Registration:
                 self.PV_interpolation(_H, p, q)
         return self.mutual_info(_H)
     
-    
+    @exeTime
     def match(self, img_stack_A, img_stack_B):
         '''
         Usage:
