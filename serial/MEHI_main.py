@@ -58,68 +58,6 @@ def registration(L_img_stack, R_img_stack, conf=0):
         R_img_stack = reg.execute(R_img_stack, vec)
         return R_img_stack
 
-def fusion_16(L_img_stack, R_img_stack):
-    L_img_stack = IO_tool.readone('L_reg_img_stack.tif')
-    R_img_stack = IO_tool.readone('R_reg_img_stack.tif')
-    L_img_stack = L_img_stack[0:125]
-    R_img_stack = R_img_stack[0:125]
-    fuse_img = fus.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
-    IO_tool.write('fuse_img_show_stack_v1.tif',fuse_img)
-   
-    L_img_stack = IO_tool.readone('L_reg_img_stack.tif')
-    R_img_stack = IO_tool.readone('R_reg_img_stack.tif')
-    L_img_stack = L_img_stack[125:250]
-    R_img_stack = R_img_stack[125:250]
-    fuse_img = fus.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
-    IO_tool.write('fuse_img_show_stack_v2.tif',fuse_img)
-   
-    L_img_stack = IO_tool.readone('L_reg_img_stack.tif')
-    R_img_stack = IO_tool.readone('R_reg_img_stack.tif')
-    L_img_stack = L_img_stack[250:375]
-    R_img_stack = R_img_stack[250:375]
-    fuse_img = fus.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
-    IO_tool.write('fuse_img_show_stack_v3.tif',fuse_img)
-   
-    L_img_stack = IO_tool.readone('L_reg_img_stack.tif')
-    R_img_stack = IO_tool.readone('R_reg_img_stack.tif')
-    L_img_stack = L_img_stack[375:500]
-    R_img_stack = R_img_stack[375:500]
-    fuse_img = fus.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
-    IO_tool.write('fuse_img_show_stack_v4.tif',fuse_img)
-
-    L_img_stack = IO_tool.readone('fuse_img_show_stack_v1.tif')
-    R_img_stack = IO_tool.readone('fuse_img_show_stack_v2.tif')
-    fuse_img = np.concatenate((L_img_stack, R_img_stack), axis=0)
-    IO_tool.write('fuse_img_show_stack_v1.tif',fuse_img)
-    L_img_stack = IO_tool.readone('fuse_img_show_stack_v3.tif')
-    R_img_stack = IO_tool.readone('fuse_img_show_stack_v4.tif')
-    fuse_img = np.concatenate((L_img_stack, R_img_stack), axis=0)
-    IO_tool.write('fuse_img_show_stack_v2.tif',fuse_img)
-    L_img_stack = IO_tool.readone('fuse_img_show_stack_v1.tif')
-    R_img_stack = IO_tool.readone('fuse_img_show_stack_v2.tif')
-    fuse_img = np.concatenate((L_img_stack, R_img_stack), axis=0)
-    IO_tool.write('fuse_img_show_stack.tif',fuse_img)
- 
-def fusion_8(L_img_stack, R_img_stack):
-    L_img_stack = IO_tool.readone('L_reg_img_stack_8bit.tif')
-    R_img_stack = IO_tool.readone('R_reg_img_stack_8bit.tif')
-    L_img_stack = L_img_stack[0:250]
-    R_img_stack = R_img_stack[0:250]
-    fuse_img = fus.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
-    IO_tool.write('fuse_img_seg_stack_v1.tif',fuse_img)
-   
-    L_img_stack = IO_tool.readone('L_reg_img_stack_8bit.tif')
-    R_img_stack = IO_tool.readone('R_reg_img_stack_8bit.tif')
-    L_img_stack = L_img_stack[250:500]
-    R_img_stack = R_img_stack[250:500]
-    fuse_img = fus.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
-    IO_tool.write('fuse_img_seg_stack_v2.tif',fuse_img)
-   
-    L_img_stack = IO_tool.readone('fuse_img_seg_stack_v1.tif')
-    R_img_stack = IO_tool.readone('fuse_img_seg_stack_v2.tif')
-    fuse_img = np.concatenate((L_img_stack, R_img_stack), axis=0)
-    IO_tool.write('fuse_img_seg_stack.tif',fuse_img)
-
 @exeTime
 def fusion_small(L_img_stack, R_img_stack):
     #L_img_stack = IO_tool.readone('l.tif')
@@ -131,8 +69,8 @@ def fusion_small(L_img_stack, R_img_stack):
     fuse_img = fus.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
     IO_tool.write('fuse_img_seg_stack_small_4.tif',fuse_img)
 
-@exeTIme
-def fusion(L_img_stack, R_img_stack):
+@exeTime
+def fusion(L_img_stack, R_img_stack, tp):
     L_img_stack = np.array(L_img_stack).astype(np.uint16)
     R_img_stack = np.array(R_img_stack).astype(np.uint16)
     n, s = len(L_img_stack), 0
@@ -141,8 +79,8 @@ def fusion(L_img_stack, R_img_stack):
             L_, R_ = L_img_stack[s, s+100], R_img_stack[s, s+100]
         else:
             L_, R_ = L_img_stack[s, n], R_img_stack[s, n]
-        fuse_img = fuse.q_fusion(L_img_stack, R_img_stack, sgm1, sgm2)
-        IO_tool.write2f('t_fus', fuse_img, offset=s)
+        fuse_img = fuse.q_fusion(L_, R_, sgm1, sgm2)
+        IO_tool.write2f('tp'+str(tp)+'/fus', fuse_img, offset=s)
         s += 100
 
 def segmentation():  
@@ -158,7 +96,7 @@ def udf(img_pwd):
 #########################################
 if __name__ == '__main__':
     inputs = [img for img in IO_tool.input(img_pwd)]
-    pool = Pool(16)
+    pool = mul.Pool(16)
     pool.map(udf, inputs)
     pool.close()
     pool.join()
