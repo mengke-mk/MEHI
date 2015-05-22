@@ -12,6 +12,7 @@ import MEHI_segmentation
 import MEHI_filter
 import traceback
 import numpy as np
+import os
 import multiprocessing as mul
 from MEHI_global import *
 from MEHI_common import *
@@ -88,10 +89,12 @@ def segmentation():
     seg.main(img_stack)
 
 def udf(img_pwd):
+    tp = os.path.split(os.path.split(img_pwd[0])[0])[1]
     L_img_stack, R_img_stack = init(img_pwd[0], img_pwd[1])
     L_img_stack, R_img_stack = preprocess(L_img_stack, R_img_stack, 16)
     R_img_stack = registration(L_img_stack, R_img_stack, conf=0)
-    fusion_small(L_img_stack, R_img_stack)
+    #fusion_small(L_img_stack, R_img_stack)
+    fusion(L_img_stack, R_img_stack, tp)
 
 #########################################
 if __name__ == '__main__':
