@@ -76,12 +76,13 @@ def fusion(L_img_stack, R_img_stack, tp):
     R_img_stack = np.array(R_img_stack).astype(np.uint16)
     n, s = len(L_img_stack), 0
     while n > s:
+        L_, R_ = [], []
         if n > s+100:
-            L_, R_ = L_img_stack[s, s+100], R_img_stack[s, s+100]
+            L_, R_ = L_img_stack[s:s+100], R_img_stack[s:s+100]
         else:
-            L_, R_ = L_img_stack[s, n], R_img_stack[s, n]
-        fuse_img = fuse.q_fusion(L_, R_, sgm1, sgm2)
-        IO_tool.write2f('tp'+str(tp)+'/fus', fuse_img, offset=s)
+            L_, R_ = L_img_stack[s:n], R_img_stack[s:n]
+        fuse_img = fus.q_fusion(L_, R_, sgm1, sgm2)
+        IO_tool.write2f(str(tp)+'/fus', fuse_img, offset=s)
         s += 100
 
 def segmentation():  
@@ -89,7 +90,7 @@ def segmentation():
     seg.main(img_stack)
 
 def udf(img_pwd):
-    tp = os.path.split(os.path.split(img_pwd[0])[0])[1]
+    tp = os.path.split(img_pwd[0])[1]
     L_img_stack, R_img_stack = init(img_pwd[0], img_pwd[1])
     L_img_stack, R_img_stack = preprocess(L_img_stack, R_img_stack, 16)
     R_img_stack = registration(L_img_stack, R_img_stack, conf=0)
