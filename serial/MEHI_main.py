@@ -36,8 +36,8 @@ def init(left_pwd, right_pwd):
 
 @exeTime
 def preprocess(L_img_stack, R_img_stack, num):
-    L_img_stack = IO_tool.read(left_pwd) 
-    R_img_stack = IO_tool.read(right_pwd)
+    #L_img_stack = IO_tool.read(left_pwd) 
+    #R_img_stack = IO_tool.read(right_pwd)
     L_img_stack = prep.intensity_normalization(L_img_stack, num)
     R_img_stack = prep.intensity_normalization(R_img_stack, num)    
     if num == 8:
