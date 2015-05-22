@@ -67,8 +67,10 @@ class Img_IO:
         - write the img_stack in the form of individual tiff
         '''
         for z,frame in enumerate(img_stack): 
-	    fname = output_pwd + name + '_%03d' % (z+offset+1) + '.tif'
-            #print fname
+	        fname = output_pwd + name + '_%03d' % (z+offset+1) + '.tif'
+            dir, file = os.path.split(fname)
+            if not os.path.exists(dir):
+                os.makedirs(dir)
             tiff.imsave(fname, frame)
 
 if __name__ == '__main__':

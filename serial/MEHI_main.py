@@ -82,7 +82,7 @@ def fusion(L_img_stack, R_img_stack, tp):
         else:
             L_, R_ = L_img_stack[s:n], R_img_stack[s:n]
         fuse_img = fus.q_fusion(L_, R_, sgm1, sgm2)
-        IO_tool.write2f(str(tp)+'/fus', fuse_img, offset=s)
+        IO_tool.write2f('/'+str(tp)+'/fus', fuse_img, offset=s)
         s += 100
 
 def segmentation():  
