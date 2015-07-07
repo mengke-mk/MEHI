@@ -181,7 +181,7 @@ class Segmentation:
         Return: 
          - cell_table: info of each cell
         ''' 
-        _rdd = = self.threshold(image_stack, rdd)
+        _rdd = self.threshold(image_stack, rdd)
         labeled_stack = _rdd.collect()
         properties = self.properties(labeled_stack, image_stack)
         properties.to_pickle('properties.pkl')

@@ -18,8 +18,7 @@ class Registration:
         self.imgA = imgA
         self.imgB = imgB
         self.H = self.generate_H(imgA, imgB)
-    
-    @exeTime
+
     def generate_H(self, imgA, imgB):
         '''
         Usage:
@@ -76,8 +75,7 @@ class Registration:
         E = np.array([[1, 0, 0], [hy, 1 , 0], [0, 0, 1]])
         F = np.dot(np.dot(A,B),C)
         return np.dot(np.dot(F,D),E)
-   
-    @exeTime
+
     def update(self, vec):
         imgA, imgB, H = self.imgA, self.imgB, self.H
         _H = H.copy()
@@ -92,7 +90,7 @@ class Registration:
                 self.PV_interpolation(_H, p, q)
         return self.mutual_info(_H)
     
-    
+    @exeTime
     def match(self, img_stack_A, img_stack_B):
         '''
         Usage:
@@ -104,7 +102,7 @@ class Registration:
             imgA, imgB = img_stack_A[i], img_stack_B[i]
             H = self.generate_H(imgA, imgB)
             tmp = self.mutual_info(H)
-            if 50 < i < 450 and dft > tmp:
+            if dft > tmp:
                 dft = tmp
                 x = i
         log('info')('sample_index='+str(x))

@@ -19,6 +19,7 @@ import pandas as pd
 import numpy as np
 from itertools import groupby
 from MEHI_common import *
+import matplotlib.pyplot as plt
 
 class Segmentation:
     '''
@@ -217,9 +218,24 @@ class Segmentation:
         prop.to_csv("test.csv")
         cell_table = prop.groupby(level='label').apply(self.df_average, 'intensitysum')
         cell_table.to_pickle("cell_table.pkl")
+   
+   def check(self, frame):
+   	labeled = threshold(frame)
+	p = properties(labeled, frame)
+	plane_props = p[p['z'] == 0]
+	fig, axes = plt.subplots(1, 2, figsize=(16,32))
+	axes[0].imshow(frame, interpolation='nearest', cmap='gray')
+	axes[1].imshow(labeled, interpolation='nearest'. cmap='Dark2')
+	axes[1].scatter(plane_props['y'], plane_props['x'], s=plane_props['intensitysum']*200, alpha=0.4)
+	axes[1].scatter(plane_props['y'], plane_props['x'], s=40, marker='+', alpha=0.4)
+        fig.hold(True)
+	plt.hold(True)
+	plt.show()
+
+
 
 if __name__ == "__main__":
     ST = SegmentationTool()
     ST.main(0)
     #ST.debug()
-        
+

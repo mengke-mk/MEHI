@@ -22,13 +22,18 @@ if debug:
     sgm2 = 88
     loglevel = ['debug','info','time','error','warn']
 else:
-    left_pwd = '/mnt/share/Yao/RL_3d/20150401/E75/4/1-L-Red'
-    right_pwd = '/mnt/share/Yao/RL_3d/20150401/E75/4/1-R-Red'
-    sample_index = 205
+    #left_pwd = '/mnt/share/Yao/RL_3d/20150401/E75/4/1-L-Red'
+    #right_pwd = '/mnt/share/Yao/RL_3d/20150401/E75/4/1-R-Red'
+    #left_pwd = '/mnt/MEHI_PEK/zwj/20150425/1-L-Green/L11'
+    #right_pwd = '/mnt/MEHI_PEK/zwj/20150425/1-R-Green/L31'
+    left_pwd = '/mnt/MEHI_PEK2/20150405sample/l1'
+    right_pwd = '/mnt/MEHI_PEK2/20150405sample/r1'
+    sample_index = 2#205
     wsize = 19
     bins = 256
     sgm1 = 41
     sgm2 = 88
     loglevel = ['debug','info','time','error','warn']
-    output_pwd = '/mnt/share/fusion/1-Red/'
-
+    #output_pwd = '/mnt/sdb_mnt/MEHI/fusion/1-Green/1'
+    #output_pwd = '/mnt/MEHI_PEK2/20150405sample/parallel'
+    output_pwd = '/mnt/xfs_snode21/MEHI_RAW_DATA/20150401/E75/4/2_result'
