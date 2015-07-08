@@ -45,25 +45,29 @@ python MEHI_s_main.py
 ## More Information
 
 ### MEHI is broadly organized into:
+
 - A main class with methods for initialization of Spark and control of the whole workflow.
 - Classes for image processing module,like MEHI\_s\_fusion.
 - Helper components like MEHI\_s\_IO, MEHI\_s\_common
 
 ### core API:
+
 __Preprocessing__:  
 - stripe\_removal(): 去横纹
 - intensity\_normalization(): 亮度平衡，图像压缩
-- sub\_background(): 减背景，去模糊
+- sub\_background(): 减背景，去模糊  
+
 __Registation&Fusion__:  
 - mutual\_info(): 计算互信息
 - q\_powell(): 计算对准向量
 - get\_trans(): 实施对准变换
-- q\_fusion(): 图像融合
+- q\_fusion(): 图像融合  
+
 __Segmentation__:  
 - Threshold(): otsu阈值粗分+watershed细分
 - Properties(): 计算分割块的属性(坐标,朝向,大小...)
 - Clustering(): 将2D分割按距离层次聚类
-- Check(): 可视化分割结果
+- Check(): 可视化分割结果  
 
 ## License
 MIT
