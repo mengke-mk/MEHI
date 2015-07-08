@@ -1,18 +1,15 @@
 # MEHI
-========
 
 Mouse Embryo Heart Imagery
-[![Build Status](https://travis-ci.org/septicmk/MEHI.svg)(https://travis-ci.org/septicmk/MEHI)]
+[![Build Status](https://travis-ci.org/septicmk/MEHI.svg)](https://travis-ci.org/septicmk/MEHI)
 
 ## About
---------
 
 MEHI is a python library for processing large-scale 3D spatial and temporal mouse embryo date. the paralleled version is built on Spark.
 
 MEHI includes the basic module for image processing, like preprocessing, registration, 2-side fusion, segmentation, tracking. the project contains two implementation, a paralleled version and a serial version. the paralleled version is written against Spark's Python API(Pyspark), making use of scipy, numpy, PuLP and pandas
 
 ## Requirements
---------
 
  - Python 2.7
  - numpy 1.9+
@@ -24,7 +21,6 @@ MEHI includes the basic module for image processing, like preprocessing, registr
  - pyspark 1.3.0
 
 ## Quick Start
---------
 
 The paralleled version is designed to run on a cluster, but currently, I just test it on local mode. Anyway, you can get it work by following steps.
 1) change the Input dir in the MEHI\_global.py or in the MEHI\_s\_global.py
@@ -44,8 +40,8 @@ segmentation(fuse_img)
 ```shell
 python MEHI_s_main.py 
 ```
+
 ## More Information
---------
 
 ### MEHI is broadly organized into:
 - A main class with methods for initialization of Spark and control of the whole workflow.
@@ -53,20 +49,21 @@ python MEHI_s_main.py
 - Helper components like MEHI\_s\_IO, MEHI\_s\_common
 
 ### core API:
-__Preprocessing__:
+__Preprocessing__:  
 - stripe\_removal(): 去横纹
 - intensity\_normalization(): 亮度平衡，图像压缩
 - sub\_background(): 减背景，去模糊
-__Registation&Fusion__:
+__Registation&Fusion__:  
 - mutual\_info(): 计算互信息
 - q\_powell(): 计算对准向量
 - get\_trans(): 实施对准变换
 - q\_fusion(): 图像融合
-__Segmentation__:
+__Segmentation__:  
 - Threshold(): otsu阈值粗分+watershed细分
 - Properties(): 计算分割块的属性(坐标,朝向,大小...)
 - Clustering(): 将2D分割按距离层次聚类
 - Check(): 可视化分割结果
+
 ## License
 --------
 MIT
