@@ -45,6 +45,21 @@ class Tracker:
                 links.append(event)
         return links
 
-    def link_rule(self, cur_df, aft_df):
+    def filter1(self, cur_df, aft_df, links):
+        tmp = [x[1] for x in links]
+        bad_cell = []
+        for cell in aft_df.index:
+            if cell not in tmp:
+                bad_cell.append(cell)
+                aft_df = aft_df.drop(cell)
+        return aft_df, bad_cell
+
+    def filter2(self, cur_df, aft_df, links):
+        
+                
+        
+
+
+        
 
 

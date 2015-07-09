@@ -5,8 +5,8 @@
 ################################
 
 import sys
-sys.path.append('/home/liuyao/spark/spark-1.3.0-bin-hadoop2.3/python')
-sys.path.append('/home/liuyao/spark/spark-1.3.0-bin-hadoop2.3/python/build')
+sys.path.append('/home/mengke/MEHI_project/spark/spark-1.3.0-bin-hadoop2.3/python')
+sys.path.append('/home/mengke/MEHI_project/spark/spark-1.3.0-bin-hadoop2.3/python/build')
 from pyspark import SparkContext, SparkConf
 
 #debug = True
