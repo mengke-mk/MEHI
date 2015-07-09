@@ -39,25 +39,37 @@ class Preprocess:
         return ret
     
     @exeTime
-    def intensity_normalization(self, img_stack):
+    def intensity_normalization(self, img_stack, num):
         '''
         Usage:
          - adjust the intensity
         args:
          - num: if you wanna 16-bit output, just let num = 16
         '''
-        max_intensity = 0
-        min_intensity = 0
+	def func(frame):
+            max_intensity = max(frame.flatten())
+            min_intensity = min(frame.flatten())
+            return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*255, frame)).astype(np.uint8)
+        def func2(frame):
+            max_intensity = max(frame.flatten())
+            min_intensity = min(frame.flatten())
+            return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*65535, frame)).astype(np.uint16)
+        # max_intensity = 0
+        # min_intensity = 0
         ret = np.zeros_like(img_stack)
         for z, frame in enumerate(img_stack):
             msg = "intensity_normalisztion %d-th frame" % (z+1)
             end = len(img_stack)
             bar('info')(msg, z+1, end)
-            max_intensity = max(frame.flatten()) 
-            min_intensity = min(frame.flatten())
-            ret[z] = map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*255, frame)
-            #log('debug')(str(ret[z].max()))
-        ret = ret.astype(np.uint8)
+            #max_intensity = max(frame.flatten()) 
+            #min_intensity = min(frame.flatten())
+            #ret[z] = map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*255, frame)
+            if num  == 8:
+	        ret[z] = func(frame)
+	    elif num == 16:
+	        ret[z] = func2(frame)
+	    #log('debug')(str(ret[z].max()))
+        #ret = ret.astype(np.uint8)
         return ret
     
     @exeTime
@@ -75,7 +87,10 @@ class Preprocess:
     def sub_background(self, img_stack):
         ret = np.zeros_like(img_stack)
         for z, frame in enumerate(img_stack):
-           ret[z] = mor.black_tophat(frame, mor.disk(15))
+	   msg = "sub_background %d-th frame" % (z+1)
+	   end = len(img_stack)
+	   bar('info')(msg, z+1, end)
+           ret[z] = mor.black_tophat(frame, mor.disk(10))
         return ret
         
 if __name__ == '__main__':

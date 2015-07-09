@@ -21,7 +21,7 @@ def exeTime(func):
         s = time.time()
         ret = func(*args, **args2)
         e = time.time()
-        msg = "%3.fs taken for {%s}" % (e-s, func.__name__)
+        msg = "%f s taken for {%s}" % (e-s, func.__name__)
         log('time')(msg)
         return ret
     return wraper

@@ -8,7 +8,7 @@ import skimage.io as io
 io.use_plugin('tifffile')
 
 from skimage.filters import threshold_otsu, threshold_adaptive, rank
-from skimage.morphology import label
+from skimage.morphology import label, binary_closing, binary_opening
 from skimage.measure import regionprops
 from skimage.feature import peak_local_max
 from skimage.morphology import disk, watershed
@@ -20,8 +20,11 @@ import numpy as np
 from itertools import groupby
 from MEHI_common import *
 import matplotlib.pyplot as plt
-
+from matplotlib.pyplot import plot, savefig
+import matplotlib
+matplotlib.use('Agg')
 class Segmentation:
+
     '''
     segment all the image 
     1. read image as timepoint
@@ -120,7 +123,7 @@ class Segmentation:
                 if(min_radius < radius < max_radius):
                     properties.append([d.weighted_centroid[0],
                                        d.weighted_centroid[1],
-                                       z,d.mean_intensity*d.area,
+                                       2.5*z,d.mean_intensity*d.area,
                                        radius,
                                        d.label])
                     indices.append(d.label)
@@ -218,24 +221,73 @@ class Segmentation:
         prop.to_csv("test.csv")
         cell_table = prop.groupby(level='label').apply(self.df_average, 'intensitysum')
         cell_table.to_pickle("cell_table.pkl")
-   
-   def check(self, frame):
-   	labeled = threshold(frame)
+
+    def check(self, frame):
+    	@exeTime
+        def threshold(frame):
+	    smooth_size = self.smooth_size
+	    min_radius = self.min_radius
+	    max_radius = self.max_radius
+	    threshold_size = smooth_size
+	    threshold_global = threshold_otsu(frame)
+	    smoothed = np.zeros_like(frame)
+	    labeled = smoothed.copy()
+	    smoothed = rank.median(frame, disk(smooth_size))
+	    smoothed = rank.enhance_contrast(smoothed, disk(smooth_size))
+	    im_max = smoothed.max()
+	    threshold = threshold_global
+	    #binary = (smoothed > threshold)*255
+	    binary = threshold_adaptive(smoothed, block_size=smooth_size)
+	    binary = binary_closing(binary, disk(smooth_size-2))
+	    #binary = binary_opening(binary, disk(smooth_size))
+	    #distance = ndimage.distance_transform_edt(binary)
+	    #local_maxi = peak_local_max(distance, min_distance=2*min_radius, indices=False, labels=smoothed)
+	    #markers = ndimage.label(local_maxi)[0]
+	    #labeled = watershed(-distance, markers, mask=binary)
+	    return binary
+	def properties(labeled, frame):
+	    smooth_size = self.smooth_size
+	    min_radius = self.min_radius
+	    max_radius = self.max_radius
+	    properties = []
+	    columns = ('x','y','z','intensitysum','tag')
+	    indices = []
+	    z = 0
+	    f_prop = regionprops(labeled.astype(np.int), intensity_image = frame)
+	    for d in f_prop:
+	    	radius = (d.area/np.pi)**0.5
+		if(3 < radius < max_radius):
+		   properties.append([d.weighted_centroid[0],
+		   		      d.weighted_centroid[1],
+				      z,d.mean_intensity*d.area,
+				      d.label])
+		   indices.append(d.label)
+	    if not len(indices):
+	        all_props = pd.DataFrame([], index=[])
+	    indices = pd.Index(indices, name='label')
+      	    properties = pd.DataFrame(properties, index=indices, columns=columns)
+	    #properties['intensitysum'] /= properties['intensitysum'].sum()
+	    return properties 
+	frame = rank.enhance_contrast(frame, disk(self.smooth_size))
+	labeled = threshold(frame)
+	#labeled = rank.median(labeled, disk(self.smooth_size))
+	#labeled = rank.enhance_contrast(labeled, disk(self.smooth_size))
 	p = properties(labeled, frame)
 	plane_props = p[p['z'] == 0]
-	fig, axes = plt.subplots(1, 2, figsize=(16,32))
+	fig, axes = plt.subplots(1, 2, figsize=(16 ,16))
 	axes[0].imshow(frame, interpolation='nearest', cmap='gray')
-	axes[1].imshow(labeled, interpolation='nearest'. cmap='Dark2')
-	axes[1].scatter(plane_props['y'], plane_props['x'], s=plane_props['intensitysum']*200, alpha=0.4)
-	axes[1].scatter(plane_props['y'], plane_props['x'], s=40, marker='+', alpha=0.4)
-        fig.hold(True)
+	axes[1].imshow(labeled, interpolation='nearest', cmap='gray')
+	#axes[1].scatter(plane_props['y'], plane_props['x'], s=plane_props['intensitysum']*200, alpha=0.4)
+	#axes[1].scatter(plane_props['y'], plane_props['x'], s=40, marker='+', alpha=0.4)
+	fig.hold(True)
 	plt.hold(True)
 	plt.show()
-
-
-
+	return np.array(labeled)
+        #savefig('fig_100.png')
 if __name__ == "__main__":
     ST = SegmentationTool()
     ST.main(0)
+    #ST.check()
     #ST.debug()
+
 

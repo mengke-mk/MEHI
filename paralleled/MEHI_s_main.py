@@ -12,6 +12,7 @@ import MEHI_s_segmentation
 import MEHI_s_filter
 import traceback
 import numpy as np
+import sys
 from MEHI_s_global import *
 from MEHI_s_common import *
 
@@ -23,10 +24,11 @@ seg = MEHI_s_segmentation.Segmentation()
 spftr = MEHI_s_filter.Spatial_Filter()
 
 if __name__ == '__main__':
-    #conf = SparkConf().setAppName('MEHI').setMaster('local[8]').set('spark.executor.memory','80g').set('spark.driver.maxResultSize','80g').set('spark.driver.memory','60g').set('spark.local.dir','/dev/shm').set('spark.storage.memoryFraction','0.2')
-    conf = SparkConf().setAppName('MEHI').setMaster('local[16]').set('spark.executor.memory','40g').set('spark.driver.maxResultSize','80g').set('spark.driver.memory','60g').set('spark.local.dir','/dev/shm').set('spark.storage.memoryFraction','0.2').set('spark.default.parallelism','128')
+    conf = SparkConf().setAppName('test').setMaster('local[4]').set('spark.executor.memory','80g').set('spark.driver.maxResultSize','80g').set('spark.driver.memory','80g').set('spark.local.dir','/dev/shm').set('spark.storage.memoryFraction','0.2').set('spark.default.parallelism','128')
+    #conf = SparkConf().setAppName('test').setMaster('local[8]')
     sc = SparkContext(conf=conf)
-    
+    #parallel_p = 256
+
     @exeTime
     def init():
         L_img_stack = IO_tool.read(left_pwd)
@@ -54,14 +56,16 @@ if __name__ == '__main__':
     @exeTime
     def registration(rddA, rddB, conf=0):
         if conf == 0:
-            vec=[ 26.09463356, -5.22590429, 3.16175216, 5.49837414, 5.49837414, 4.49837414, 4.49837414 ]
+            vec=[ -3.04981490e+01, 4.38364719e+01, 4.24726430e+00, 2.82550778e-02, 3.31111499e-01, 9.39129920e-01, 3.21995247e-01 ]
             rddB = reg.execute(rddB, vec)
+	    img_stack_B = rddB.collect()
+	    IO_tool.write2f('/registrationR/regis', img_stack_B)
             return rddB
         else:
             vec0 = [0,0,0,1,1,0,0]
             L_img_stack = rddA.collect()
 	    R_img_stack = rddB.collect()
-	    #sample_index = reg.match(L_img_stack, R_img_stack)
+	    sample_index = reg.match(L_img_stack, R_img_stack)
             vec = reg.q_powell(L_img_stack[sample_index], R_img_stack[sample_index], vec0)
             open('logvec.txt','w').write(str(vec))
             rddB = reg.execute(rddB, vec)
@@ -75,7 +79,7 @@ if __name__ == '__main__':
         log('info')('mark')
         rdd = sc.parallelize(img_stack)
         fuse_img = fus.q_fusion(rdd, sgm1, sgm2)
-        IO_tool.write("fuse_img.tif", fuse_img) 
+        IO_tool.write2f('/fusion/fus', fuse_img) 
         return fuse_img
     
     @exeTime
@@ -83,9 +87,8 @@ if __name__ == '__main__':
         rdd = sc.parallelize(fuse_img)
         seg.main(fuse_img, rdd)
 ###
-    #L_img_stack, R_img_stack = init()
-    #rddA, rddB = preprocess(L_img_stack, R_img_stack, 8)
-    #rddB = registration(rddA, rddB, conf=0)
-    #fuse_img = fusion(rddA, rddB)
-    img_stack = IO_tool.read(output_pwd+'/fusion')
-    segmentation(img_stack)
+    L_img_stack, R_img_stack = init()
+    rddA, rddB = preprocess(L_img_stack, R_img_stack, 8)
+    rddB = registration(rddA, rddB, conf=0)
+    fuse_img = fusion(rddA, rddB)
+        

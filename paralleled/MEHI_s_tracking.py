@@ -39,7 +39,12 @@ class Tracker:
         for cell in aft_df.index:
             prob += sum(x[event] for event in possible_events if cell in event[1:]) <= 1
         prob.solve()
+        links = []
         for event in possible_events:
             if x[event].value == 1.0:
-                print event
+                links.append(event)
+        return links
+
+    def link_rule(self, cur_df, aft_df):
+
 

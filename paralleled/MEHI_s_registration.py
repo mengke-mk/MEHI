@@ -102,8 +102,9 @@ class Registration:
             imgA, imgB = img_stack_A[i], img_stack_B[i]
             H = self.generate_H(imgA, imgB)
             tmp = self.mutual_info(H)
+            #if 50 < i < n-50 and dft > tmp:
             if dft > tmp:
-                dft = tmp
+	        dft = tmp
                 x = i
         log('info')('sample_index='+str(x))
         return x 

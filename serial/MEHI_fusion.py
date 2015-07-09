@@ -47,11 +47,11 @@ class Fusion:
         fused_img = np.zeros_like(img_stack_A)
         fused_img = img_stack_A*ent_mat_A + img_stack_B*ent_mat_B
         fused_img = fused_img / (ent_mat_A + ent_mat_B) 
-        fused_img = fused_img.astype(np.uint8)
+        fused_img = fused_img.astype(np.uint16)
         return fused_img
     
     @exeTime
-    def q_fusion(self, img_stack_A, img_stack_B, sgm1, sgm2):
+    def q_fusion(self, img_stack_A, img_stack_B, sgm1, sgm2, num):
         '''
         Usage:
          - a fast implementation of fusion
@@ -66,7 +66,7 @@ class Fusion:
             bar('info')(msg, j+1, end)
             tmp = img_stack_A[j] - gaussian_filter(img_stack_A[j],sgm1)
             WA[j] = gaussian_filter(tmp*tmp,sgm2)
-        WB = np.zeros_like(img_stack_B).astype(float)
+            WB = np.zeros_like(img_stack_B).astype(float)
         for j, f in enumerate(WB):
             msg = "WB[%d]" % j
             end = len(WB)
@@ -79,7 +79,10 @@ class Fusion:
         fused_img = img_stack_A*WA + img_stack_B*WB
         fused_img = fused_img/ (WA + WB)
         #warning
-        fused_img = fused_img.astype(np.uint8)
+	if num == 8:
+            fused_img = fused_img.astype(np.uint8)
+	elif num == 16:
+	    fused_img = fused_img.astype(np.uint16)
         return fused_img
     
 if __name__ == '__main__':

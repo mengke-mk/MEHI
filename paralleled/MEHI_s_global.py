@@ -5,8 +5,8 @@
 ################################
 
 import sys
-sys.path.append('/home/mengke/spark/spark-1.3.0-bin-hadoop2.3/python')
-sys.path.append('/home/mengke/spark/spark-1.3.0-bin-hadoop2.3/python/build')
+sys.path.append('/home/liuyao/spark/spark-1.3.0-bin-hadoop2.3/python')
+sys.path.append('/home/liuyao/spark/spark-1.3.0-bin-hadoop2.3/python/build')
 from pyspark import SparkContext, SparkConf
 
 #debug = True
@@ -26,14 +26,16 @@ else:
     #right_pwd = '/mnt/share/Yao/RL_3d/20150401/E75/4/1-R-Red'
     #left_pwd = '/mnt/MEHI_PEK/zwj/20150425/1-L-Green/L11'
     #right_pwd = '/mnt/MEHI_PEK/zwj/20150425/1-R-Green/L31'
-    left_pwd = '/mnt/MEHI_PEK2/20150405sample/l1'
-    right_pwd = '/mnt/MEHI_PEK2/20150405sample/r1'
-    sample_index = 2#205
+    left_pwd = '/mnt/xfs_snode21/MEHI_DECONVOLUTION/20150401/E75/4/2-L-Red'
+    right_pwd = '/mnt/xfs_snode21/MEHI_DECONVOLUTION/20150401/E75/4/2-R-Red'
+    #left_pwd = '/mnt/MEHI_PEK2/20150405sample30/datal'
+    #right_pwd = '/mnt/MEHI_PEK2/20150405sample30/datar'
+    sample_index = 2
     wsize = 19
     bins = 256
     sgm1 = 41
     sgm2 = 88
     loglevel = ['debug','info','time','error','warn']
     #output_pwd = '/mnt/sdb_mnt/MEHI/fusion/1-Green/1'
-    #output_pwd = '/mnt/MEHI_PEK2/20150405sample/parallel'
-    output_pwd = '/mnt/xfs_snode21/MEHI_RAW_DATA/20150401/E75/4/2_result'
+    output_pwd = '/mnt/xfs_snode21/MEHI_DECONVOLUTION/20150401/E75/4/2-parallel-0624'
+
