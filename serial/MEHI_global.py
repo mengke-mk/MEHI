@@ -4,8 +4,8 @@
 # FileName : MEHI_global.py
 ################################
 
-debug = True
-#debug = False
+#debug = True
+debug = False
 if debug:
     left_pwd = '/home/mengke/src/test/left'
     right_pwd = '/home/mengke/src/test/right'

@@ -19,10 +19,11 @@ import pandas as pd
 import numpy as np
 from itertools import groupby
 from MEHI_common import *
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import plot, savefig
 import matplotlib
 matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import plot, savefig
+
 class Segmentation:
 
     '''

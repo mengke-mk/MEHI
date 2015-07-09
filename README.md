@@ -14,7 +14,7 @@ MEHI includes the basic module for image processing, like preprocessing, registr
 
  - Python 2.7
  - numpy 1.9+
- - pandas 0.16+
+ - pandas 0.16.1+
  - matplotlib 1.4+
  - PuLP 6.1+
  - scikit-image 0.11+
