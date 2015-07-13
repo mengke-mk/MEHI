@@ -7,8 +7,8 @@
 debug = True
 #debug = False
 if debug:
-    left_pwd = '/home/mengke/src/test/left'
-    right_pwd = '/home/mengke/src/test/right'
+    left_pwd = '/mnt/xfs_snode21/MEHI_Test_data/20150401sample/1-L-Red'
+    right_pwd = '/mnt/xfs_snode21/MEHI_Test_data/20150401sample/1-R-Red'
     E75_fuse_pwd = '/mnt/xfs_snode21/MEHI_DECONVOLUTION/20150401/E75/4/1-0625-8bit/fusion'
     E75_L_pwd = '/mnt/xfs_snode21/MEHI_DECONVOLUTION/20150401/E75/4/1-L-Red'
     E75_R_pwd = '/mnt/xfs_snode21/MEHI_DECONVOLUTION/20150401/E75/4/1-R-Red'

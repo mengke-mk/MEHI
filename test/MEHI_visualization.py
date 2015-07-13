@@ -1,6 +1,3 @@
-import sys
-sys.path.append('/home/mengke/VTK-6.2.0-Linux-64bit/bin')
-from vtkpython import *
 import math
 import pandas as pd
 from random import random
