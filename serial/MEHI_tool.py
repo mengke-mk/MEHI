@@ -61,4 +61,3 @@ if __name__ == '__main__':
    #x = IO.read(left_pwd)
    #x = IO.readone('a.tif')
    x = IO.read(left_pwd)
-    
