@@ -23,7 +23,7 @@ MEHI includes the basic module for image processing, like preprocessing, registr
 
 ## Quick Start
 
-The paralleled version is designed to run on a cluster, but currently, I just test it on local mode. Anyway, you can get it work by following steps.  
+The paralleled version is designed to run on a cluster, but currently, I just test it on local mode. Anyway, you can get it work by following steps.
 1) change the Input dir in the MEHI\_global.py or in the MEHI\_s\_global.py
 ```python
 left_pwd = 'your image dir'

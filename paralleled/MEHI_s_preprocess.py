@@ -11,6 +11,7 @@ from skimage import img_as_float
 import numpy as np
 import math
 from MEHI_s_common import *
+import sub
 
 class Preprocess:
 
@@ -70,6 +71,12 @@ class Preprocess:
     def sub_background(self, rdd):
         def func(frame):
             return mor.black_tophat(frame, mor.disk(15))
+        return rdd.map(func)
+
+    @exeTime
+    def subtract_Background(self, rdd, radius):
+        def func(frame):
+            return sub.subtract_Background(frame, radius)
         return rdd.map(func)
         
 if __name__ == '__main__':

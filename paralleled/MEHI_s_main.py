@@ -88,7 +88,15 @@ if __name__ == '__main__':
         seg.main(fuse_img, rdd)
 ###
     L_img_stack, R_img_stack = init()
-    rddA, rddB = preprocess(L_img_stack, R_img_stack, 8)
-    rddB = registration(rddA, rddB, conf=0)
-    fuse_img = fusion(rddA, rddB)
+    rddA = sc.parallelize(L_img_stack)
+    rddB = sc.parallelize(R_img_stack)
+    rddA = prep.subtract_Background(rddA, 12)
+    rddB = prep.subtract_Background(rddB, 12)
+    L_img_stack = rddA.collect()
+    R_img_stack = rddB.collect()
+    IO_tool.write('/subtract/subL', L_img_stack)
+    IO_tool.write('/subtract/subR', R_img_stack)
+    #rddA, rddB = preprocess(L_img_stack, R_img_stack, 8)
+    #rddB = registration(rddA, rddB, conf=0)
+    #fuse_img = fusion(rddA, rddB)
         
