@@ -37,15 +37,15 @@ cdef extern from "sub_bg.h" namespace "prepocess":
 @cython.boundscheck(False)
 @cython.wraparound(False)
 
-def subtract_Backround(frame, radius):
+def subtract_Background(frame, radius):
     frame_int = frame.astype(np.intc)
     frame_f = frame_int.flatten()
     ret_f = np.zeros_like(frame_f)
-    background = build_Backround(frame_f, ret_f, radius)
+    background = build_Background(frame_f, ret_f, radius)
     background = np.reshape(background, (2048, 2048))
     return (frame_int-background).clip(0,65535).astype(np.uint16)
 
-def build_Backround(np.ndarray[int, ndim=1, mode="c"] frame not None,
+def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,
         np.ndarray[int, ndim=1, mode="c"] ret not None,
         int rd):
     cdef Rolling_Ball_Background *RBB = new Rolling_Ball_Background()

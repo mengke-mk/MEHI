@@ -1170,8 +1170,8 @@ int __pyx_module_is_main_sub = 0;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_RuntimeError;
-static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_frame, PyObject *__pyx_v_radius); /* proto */
-static PyObject *__pyx_pf_3sub_2build_Backround(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_frame, PyArrayObject *__pyx_v_ret, int __pyx_v_rd); /* proto */
+static PyObject *__pyx_pf_3sub_subtract_Background(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_frame, PyObject *__pyx_v_radius); /* proto */
+static PyObject *__pyx_pf_3sub_2build_Background(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_frame, PyArrayObject *__pyx_v_ret, int __pyx_v_rd); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static char __pyx_k_B[] = "B";
@@ -1217,8 +1217,8 @@ static char __pyx_k_ValueError[] = "ValueError";
 static char __pyx_k_background[] = "background";
 static char __pyx_k_zeros_like[] = "zeros_like";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
-static char __pyx_k_build_Backround[] = "build_Backround";
-static char __pyx_k_subtract_Backround[] = "subtract_Backround";
+static char __pyx_k_build_Background[] = "build_Background";
+static char __pyx_k_subtract_Background[] = "subtract_Background";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
 static char __pyx_k_home_Galaxy_pku_lambda_MEHI_MEH[] = "/home/Galaxy/pku-lambda/MEHI/MEHI_mk/MEHI/sb/sub.pyx";
 static char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
@@ -1234,7 +1234,7 @@ static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_astype;
 static PyObject *__pyx_n_s_background;
-static PyObject *__pyx_n_s_build_Backround;
+static PyObject *__pyx_n_s_build_Background;
 static PyObject *__pyx_n_s_cframe;
 static PyObject *__pyx_n_s_clip;
 static PyObject *__pyx_n_s_flatten;
@@ -1256,7 +1256,7 @@ static PyObject *__pyx_n_s_reshape;
 static PyObject *__pyx_n_s_ret;
 static PyObject *__pyx_n_s_ret_f;
 static PyObject *__pyx_n_s_sub;
-static PyObject *__pyx_n_s_subtract_Backround;
+static PyObject *__pyx_n_s_subtract_Background;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_uint16;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
@@ -1280,15 +1280,15 @@ static PyObject *__pyx_codeobj__12;
 /* "sub.pyx":40
  * @cython.wraparound(False)
  * 
- * def subtract_Backround(frame, radius):             # <<<<<<<<<<<<<<
+ * def subtract_Background(frame, radius):             # <<<<<<<<<<<<<<
  *     frame_int = frame.astype(np.intc)
  *     frame_f = frame_int.flatten()
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3sub_1subtract_Backround(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_3sub_1subtract_Backround = {"subtract_Backround", (PyCFunction)__pyx_pw_3sub_1subtract_Backround, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_3sub_1subtract_Backround(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_3sub_1subtract_Background(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_3sub_1subtract_Background = {"subtract_Background", (PyCFunction)__pyx_pw_3sub_1subtract_Background, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_3sub_1subtract_Background(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_frame = 0;
   PyObject *__pyx_v_radius = 0;
   int __pyx_lineno = 0;
@@ -1296,7 +1296,7 @@ static PyObject *__pyx_pw_3sub_1subtract_Backround(PyObject *__pyx_self, PyObjec
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("subtract_Backround (wrapper)", 0);
+  __Pyx_RefNannySetupContext("subtract_Background (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_frame,&__pyx_n_s_radius,0};
     PyObject* values[2] = {0,0};
@@ -1317,11 +1317,11 @@ static PyObject *__pyx_pw_3sub_1subtract_Backround(PyObject *__pyx_self, PyObjec
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_radius)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("subtract_Backround", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("subtract_Background", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "subtract_Backround") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "subtract_Background") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -1334,20 +1334,20 @@ static PyObject *__pyx_pw_3sub_1subtract_Backround(PyObject *__pyx_self, PyObjec
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("subtract_Backround", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("subtract_Background", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("sub.subtract_Backround", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sub.subtract_Background", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3sub_subtract_Backround(__pyx_self, __pyx_v_frame, __pyx_v_radius);
+  __pyx_r = __pyx_pf_3sub_subtract_Background(__pyx_self, __pyx_v_frame, __pyx_v_radius);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_frame, PyObject *__pyx_v_radius) {
+static PyObject *__pyx_pf_3sub_subtract_Background(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_frame, PyObject *__pyx_v_radius) {
   PyObject *__pyx_v_frame_int = NULL;
   PyObject *__pyx_v_frame_f = NULL;
   PyObject *__pyx_v_ret_f = NULL;
@@ -1363,11 +1363,11 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("subtract_Backround", 0);
+  __Pyx_RefNannySetupContext("subtract_Background", 0);
 
   /* "sub.pyx":41
  * 
- * def subtract_Backround(frame, radius):
+ * def subtract_Background(frame, radius):
  *     frame_int = frame.astype(np.intc)             # <<<<<<<<<<<<<<
  *     frame_f = frame_int.flatten()
  *     ret_f = np.zeros_like(frame_f)
@@ -1409,11 +1409,11 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_1 = 0;
 
   /* "sub.pyx":42
- * def subtract_Backround(frame, radius):
+ * def subtract_Background(frame, radius):
  *     frame_int = frame.astype(np.intc)
  *     frame_f = frame_int.flatten()             # <<<<<<<<<<<<<<
  *     ret_f = np.zeros_like(frame_f)
- *     background = build_Backround(frame_f, ret_f, radius)
+ *     background = build_Background(frame_f, ret_f, radius)
  */
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_frame_int, __pyx_n_s_flatten); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
@@ -1442,7 +1442,7 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
  *     frame_int = frame.astype(np.intc)
  *     frame_f = frame_int.flatten()
  *     ret_f = np.zeros_like(frame_f)             # <<<<<<<<<<<<<<
- *     background = build_Backround(frame_f, ret_f, radius)
+ *     background = build_Background(frame_f, ret_f, radius)
  *     background = np.reshape(background, (2048, 2048))
  */
   __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -1481,11 +1481,11 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
   /* "sub.pyx":44
  *     frame_f = frame_int.flatten()
  *     ret_f = np.zeros_like(frame_f)
- *     background = build_Backround(frame_f, ret_f, radius)             # <<<<<<<<<<<<<<
+ *     background = build_Background(frame_f, ret_f, radius)             # <<<<<<<<<<<<<<
  *     background = np.reshape(background, (2048, 2048))
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)
  */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_build_Backround); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_build_Background); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_4 = NULL;
   __pyx_t_6 = 0;
@@ -1522,7 +1522,7 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
 
   /* "sub.pyx":45
  *     ret_f = np.zeros_like(frame_f)
- *     background = build_Backround(frame_f, ret_f, radius)
+ *     background = build_Background(frame_f, ret_f, radius)
  *     background = np.reshape(background, (2048, 2048))             # <<<<<<<<<<<<<<
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)
  * 
@@ -1563,11 +1563,11 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_1 = 0;
 
   /* "sub.pyx":46
- *     background = build_Backround(frame_f, ret_f, radius)
+ *     background = build_Background(frame_f, ret_f, radius)
  *     background = np.reshape(background, (2048, 2048))
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)             # <<<<<<<<<<<<<<
  * 
- * def build_Backround(np.ndarray[int, ndim=1, mode="c"] frame not None,
+ * def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2 = PyNumber_Subtract(__pyx_v_frame_int, __pyx_v_background); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -1619,7 +1619,7 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
   /* "sub.pyx":40
  * @cython.wraparound(False)
  * 
- * def subtract_Backround(frame, radius):             # <<<<<<<<<<<<<<
+ * def subtract_Background(frame, radius):             # <<<<<<<<<<<<<<
  *     frame_int = frame.astype(np.intc)
  *     frame_f = frame_int.flatten()
  */
@@ -1631,7 +1631,7 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("sub.subtract_Backround", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sub.subtract_Background", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_frame_int);
@@ -1646,15 +1646,15 @@ static PyObject *__pyx_pf_3sub_subtract_Backround(CYTHON_UNUSED PyObject *__pyx_
 /* "sub.pyx":48
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)
  * 
- * def build_Backround(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
+ * def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[int, ndim=1, mode="c"] ret not None,
  *         int rd):
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3sub_3build_Backround(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_3sub_3build_Backround = {"build_Backround", (PyCFunction)__pyx_pw_3sub_3build_Backround, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_3sub_3build_Backround(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_3sub_3build_Background(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_3sub_3build_Background = {"build_Background", (PyCFunction)__pyx_pw_3sub_3build_Background, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_3sub_3build_Background(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_frame = 0;
   PyArrayObject *__pyx_v_ret = 0;
   int __pyx_v_rd;
@@ -1663,7 +1663,7 @@ static PyObject *__pyx_pw_3sub_3build_Backround(PyObject *__pyx_self, PyObject *
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("build_Backround (wrapper)", 0);
+  __Pyx_RefNannySetupContext("build_Background (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_frame,&__pyx_n_s_ret,&__pyx_n_s_rd,0};
     PyObject* values[3] = {0,0,0};
@@ -1685,16 +1685,16 @@ static PyObject *__pyx_pw_3sub_3build_Backround(PyObject *__pyx_self, PyObject *
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_ret)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("build_Backround", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("build_Background", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_rd)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("build_Backround", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("build_Background", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "build_Backround") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "build_Background") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -1709,15 +1709,15 @@ static PyObject *__pyx_pw_3sub_3build_Backround(PyObject *__pyx_self, PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("build_Backround", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("build_Background", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("sub.build_Backround", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sub.build_Background", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_frame), __pyx_ptype_5numpy_ndarray, 0, "frame", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ret), __pyx_ptype_5numpy_ndarray, 0, "ret", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_3sub_2build_Backround(__pyx_self, __pyx_v_frame, __pyx_v_ret, __pyx_v_rd);
+  __pyx_r = __pyx_pf_3sub_2build_Background(__pyx_self, __pyx_v_frame, __pyx_v_ret, __pyx_v_rd);
 
   /* function exit code */
   goto __pyx_L0;
@@ -1728,7 +1728,7 @@ static PyObject *__pyx_pw_3sub_3build_Backround(PyObject *__pyx_self, PyObject *
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3sub_2build_Backround(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_frame, PyArrayObject *__pyx_v_ret, int __pyx_v_rd) {
+static PyObject *__pyx_pf_3sub_2build_Background(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_frame, PyArrayObject *__pyx_v_ret, int __pyx_v_rd) {
   prepocess::Rolling_Ball_Background *__pyx_v_RBB;
   prepocess::Image *__pyx_v_cframe;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_frame;
@@ -1745,7 +1745,7 @@ static PyObject *__pyx_pf_3sub_2build_Backround(CYTHON_UNUSED PyObject *__pyx_se
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("build_Backround", 0);
+  __Pyx_RefNannySetupContext("build_Background", 0);
   __pyx_pybuffer_frame.pybuffer.buf = NULL;
   __pyx_pybuffer_frame.refcount = 0;
   __pyx_pybuffernd_frame.data = NULL;
@@ -1854,7 +1854,7 @@ static PyObject *__pyx_pf_3sub_2build_Backround(CYTHON_UNUSED PyObject *__pyx_se
   /* "sub.pyx":48
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)
  * 
- * def build_Backround(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
+ * def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[int, ndim=1, mode="c"] ret not None,
  *         int rd):
  */
@@ -1866,7 +1866,7 @@ static PyObject *__pyx_pf_3sub_2build_Backround(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_frame.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_ret.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("sub.build_Backround", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sub.build_Background", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3912,7 +3912,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_s_astype, __pyx_k_astype, sizeof(__pyx_k_astype), 0, 0, 1, 1},
   {&__pyx_n_s_background, __pyx_k_background, sizeof(__pyx_k_background), 0, 0, 1, 1},
-  {&__pyx_n_s_build_Backround, __pyx_k_build_Backround, sizeof(__pyx_k_build_Backround), 0, 0, 1, 1},
+  {&__pyx_n_s_build_Background, __pyx_k_build_Background, sizeof(__pyx_k_build_Background), 0, 0, 1, 1},
   {&__pyx_n_s_cframe, __pyx_k_cframe, sizeof(__pyx_k_cframe), 0, 0, 1, 1},
   {&__pyx_n_s_clip, __pyx_k_clip, sizeof(__pyx_k_clip), 0, 0, 1, 1},
   {&__pyx_n_s_flatten, __pyx_k_flatten, sizeof(__pyx_k_flatten), 0, 0, 1, 1},
@@ -3934,7 +3934,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_ret, __pyx_k_ret, sizeof(__pyx_k_ret), 0, 0, 1, 1},
   {&__pyx_n_s_ret_f, __pyx_k_ret_f, sizeof(__pyx_k_ret_f), 0, 0, 1, 1},
   {&__pyx_n_s_sub, __pyx_k_sub, sizeof(__pyx_k_sub), 0, 0, 1, 1},
-  {&__pyx_n_s_subtract_Backround, __pyx_k_subtract_Backround, sizeof(__pyx_k_subtract_Backround), 0, 0, 1, 1},
+  {&__pyx_n_s_subtract_Background, __pyx_k_subtract_Background, sizeof(__pyx_k_subtract_Background), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_uint16, __pyx_k_uint16, sizeof(__pyx_k_uint16), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
@@ -3956,7 +3956,7 @@ static int __Pyx_InitCachedConstants(void) {
 
   /* "sub.pyx":45
  *     ret_f = np.zeros_like(frame_f)
- *     background = build_Backround(frame_f, ret_f, radius)
+ *     background = build_Background(frame_f, ret_f, radius)
  *     background = np.reshape(background, (2048, 2048))             # <<<<<<<<<<<<<<
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)
  * 
@@ -3966,11 +3966,11 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple_);
 
   /* "sub.pyx":46
- *     background = build_Backround(frame_f, ret_f, radius)
+ *     background = build_Background(frame_f, ret_f, radius)
  *     background = np.reshape(background, (2048, 2048))
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)             # <<<<<<<<<<<<<<
  * 
- * def build_Backround(np.ndarray[int, ndim=1, mode="c"] frame not None,
+ * def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,
  */
   __pyx_tuple__2 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_65535); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__2);
@@ -4045,26 +4045,26 @@ static int __Pyx_InitCachedConstants(void) {
   /* "sub.pyx":40
  * @cython.wraparound(False)
  * 
- * def subtract_Backround(frame, radius):             # <<<<<<<<<<<<<<
+ * def subtract_Background(frame, radius):             # <<<<<<<<<<<<<<
  *     frame_int = frame.astype(np.intc)
  *     frame_f = frame_int.flatten()
  */
   __pyx_tuple__9 = PyTuple_Pack(6, __pyx_n_s_frame, __pyx_n_s_radius, __pyx_n_s_frame_int, __pyx_n_s_frame_f, __pyx_n_s_ret_f, __pyx_n_s_background); if (unlikely(!__pyx_tuple__9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
-  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_Galaxy_pku_lambda_MEHI_MEH, __pyx_n_s_subtract_Backround, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_Galaxy_pku_lambda_MEHI_MEH, __pyx_n_s_subtract_Background, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "sub.pyx":48
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)
  * 
- * def build_Backround(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
+ * def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[int, ndim=1, mode="c"] ret not None,
  *         int rd):
  */
   __pyx_tuple__11 = PyTuple_Pack(5, __pyx_n_s_frame, __pyx_n_s_ret, __pyx_n_s_rd, __pyx_n_s_RBB, __pyx_n_s_cframe); if (unlikely(!__pyx_tuple__11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
-  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_Galaxy_pku_lambda_MEHI_MEH, __pyx_n_s_build_Backround, 48, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_Galaxy_pku_lambda_MEHI_MEH, __pyx_n_s_build_Background, 48, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -4194,25 +4194,25 @@ PyMODINIT_FUNC PyInit_sub(void)
   /* "sub.pyx":40
  * @cython.wraparound(False)
  * 
- * def subtract_Backround(frame, radius):             # <<<<<<<<<<<<<<
+ * def subtract_Background(frame, radius):             # <<<<<<<<<<<<<<
  *     frame_int = frame.astype(np.intc)
  *     frame_f = frame_int.flatten()
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3sub_1subtract_Backround, NULL, __pyx_n_s_sub); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3sub_1subtract_Background, NULL, __pyx_n_s_sub); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_subtract_Backround, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_subtract_Background, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "sub.pyx":48
  *     return (frame_int-background).clip(0,65535).astype(np.uint16)
  * 
- * def build_Backround(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
+ * def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[int, ndim=1, mode="c"] ret not None,
  *         int rd):
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3sub_3build_Backround, NULL, __pyx_n_s_sub); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3sub_3build_Background, NULL, __pyx_n_s_sub); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_build_Backround, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_build_Background, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "sub.pyx":1
