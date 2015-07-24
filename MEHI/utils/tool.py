@@ -1,54 +1,11 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/4/3 9:13:31
-# FileName : MEHI_tool.py
+# Date     : 2015/07/24 16:57:30
+# FileName : tool.py
 ################################
 
 import numpy as np
 import os,sys
-import skimage.external.tifffile as tiff
-
-@exeTime
-def load_tiff(pwd):
-    '''
-    Usage:
-     - just read all the image under the pwd
-    '''
-    if os.path.isdir(pwd):
-        img_stack = []
-        names = []
-        for imgname in os.listdir(pwd):
-            if imgname.endswith('.tif'):
-                names.append(imgname)
-        names = sorted(names, key = lambda x: int(filter(str.isdigit, x)))
-        for z,imgname in enumerate(names):
-            msg = "reading %d-th frame" % (z)
-            end = len(names)
-            bar('info')(msg, z, end)
-            img_pwd = os.path.join(pwd, imgname)
-            if img_pwd.endswith('.tif'):
-                img = tiff.imread(img_pwd)
-                img_stack.append(img)
-        return np.array(img_stack)
-    else:
-        return tiff.imread(pwd)
-
-@exeTime 
-def save_tiff(img_stack, name, pwd=None):
-    '''
-    Usage:
-     - write the img_stack
-    '''
-    if not pwd:
-        tiff.imsave(name, img_stack) 
-    else:
-        for z,frame in enumerate(img_stack):
-            fname = pwd + name + '_%03d' % (z+1) + '.tif'
-            dir, file = os.path.split(fname)
-            if not os.path.exists(dir):
-                os.makedirs(dir)
-                tiff.imsave(fname, frame)
-    
 
 def exeTime(func):
     '''
@@ -134,6 +91,7 @@ def log(level):
      - this will just show info
      - e.g. log('info')(msg)
     '''
+    from MEHI.utils.configuration import loglevel
     if level in loglevel:
         def wraper(msg):
             print '[' + bcolors.decode(level) + level + bcolors.decode('endc') + '] '+ msg

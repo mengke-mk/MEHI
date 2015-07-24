@@ -94,7 +94,18 @@ def subtract_Background(rdd, size=10):
     def func(frame):
         return subtract_Background(frame, size)
     return rdd.map(func)
-        
+
+def shrink(rdd, shrink_size=2):
+    def func(frame):
+        _X,_Y = frame.shape
+        _sX, _sY = _X / shrink_size, _Y / shrink_size
+        shrink_frame = np.zeros([_sX,_sY])
+        for i in range(_sX):
+            for j in range(_sY):
+                shrink_frame[i][j] = sum(frame[i*shrink_size:(i+1)*shrink_size,j*shrink_size:(j+1)*shrink_size].flatten()) / (shrink_size*shrink_size)
+        return shrink_frame.astype(frame.dtype)
+    return rdd.map(func)
+       
 if __name__ == '__main__':
     print 'OK'
     pass

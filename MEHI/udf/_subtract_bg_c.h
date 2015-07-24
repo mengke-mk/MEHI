@@ -73,4 +73,16 @@ namespace prepocess{
         Image subtractBackround(Image ip, int ballRadius);
         void run(Image ip, int rd, int* ret);
     };
+
+    class Rolling_Ball_Background_8{
+        public:
+        int radius;
+        Image rollBall(RollingBall ball, Image image, Image smallImage);
+        Image shrinkImage(Image ip, int shrinkfactor);
+        void interpolateBackground(Image background, RollingBall ball);
+        void extrapolateBackground(Image background, RollingBall ball);
+        Image subtractBackround(Image ip, int ballRadius);
+        void run(Image ip, int rd, int* ret);
+    };
+
 }

@@ -123,7 +123,6 @@ def execute(img_stack, vec):
         ret = np.array(ret)
         return ret
     return map(func, img_stack)
-          
 
 if __name__ == '__main__':
     pass

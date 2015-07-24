@@ -7,7 +7,7 @@
 import numpy as np
 import math
 
-def q_fusion(img_stack, sgm1=44, sgm2=81): 
+def content_fusion(img_stack, sgm1=44, sgm2=81): 
     '''
     Usage:
      - a fast implementation of content-based fusion

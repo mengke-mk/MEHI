@@ -1,7 +1,11 @@
 # MEHI
 
 Mouse Embryo Heart Imagery 
-   
+  
+   ╯　　　 　╰   
+  ●　　　 　 ●   
+  " 　 　^　　"  
+  
 [![Build Status](https://travis-ci.org/septicmk/MEHI.svg)](https://travis-ci.org/septicmk/MEHI)
 
 ## About
@@ -16,10 +20,11 @@ MEHI includes the basic module for image processing, like preprocessing, registr
  - numpy 1.9+
  - pandas 0.16.1+
  - matplotlib 1.4+
- - PuLP 6.1+
+ - PyWavelet 0.2.2+
  - scikit-image 0.11+
  - scipy 0.15+
  - pyspark 1.3.0
+ - Cython 0.21+ 
 
 ## Quick Start
 
