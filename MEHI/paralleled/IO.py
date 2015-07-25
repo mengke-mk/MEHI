@@ -24,7 +24,7 @@ def load_tiff(sc, pwd, start_index=None, end_index=None):
             if img_pwd.endswith('.tif'):
                 img = tiff.imread(img_pwd)
             return img
-        rdd_file = sc.parallelize(names, n)
+        rdd_file = sc.parallelize(names)
         return np.squeeze(np.array(rdd_file.map(func).collect()))
     else:
         return tiff.imread(pwd)
