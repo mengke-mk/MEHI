@@ -1,7 +1,9 @@
 import skimage.external.tifffile as tiff
 import numpy as np
 import os
+from MEHI.utils.tool import exeTime
 
+@exeTime
 def load_tiff(sc, pwd, start_index=None, end_index=None):
     '''
     Usage:
@@ -27,6 +29,7 @@ def load_tiff(sc, pwd, start_index=None, end_index=None):
     else:
         return tiff.imread(pwd)
 
+@exeTime
 def save_tiff(img_stack, name, sc, pwd=None):
     '''
     Usage:
