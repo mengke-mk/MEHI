@@ -1,4 +1,6 @@
 *.tif
+!L*.tif
+!R*.tif
 *.csv
 *.pkl
 *.png
