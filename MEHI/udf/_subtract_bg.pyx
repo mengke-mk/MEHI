@@ -52,23 +52,25 @@ def subtract_Background(frame, radius):
         frame_int = frame.astype(np.intc)
         frame_f = frame_int.flatten()
         ret_f = np.zeros_like(frame_f)
-        background = build_Background(frame_f, ret_f, radius)
+        background = build_Background(frame_f, ret_f, radius, _X)
         background = np.reshape(background, (_X, _Y))
         return (frame_int-background).clip(0,65535).astype(np.uint16)
     elif frame.dtype == np.uint8:
         frame_int = frame.astype(np.intc)
         frame_f = frame_int.flatten()
         ret_f = np.zeros_like(frame_f)
-        background = build_Background_8(frame_f, ret_f, radius)
+        background = build_Background_8(frame_f, ret_f, radius, _X)
         background = np.reshape(background, (_X, _Y))
         return (frame_int-background).clip(0,255).astype(np.uint8)
+    else:
+        return frame
 
 
 def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,
         np.ndarray[int, ndim=1, mode="c"] ret not None,
-        int rd):
+        int rd, int n):
     cdef Rolling_Ball_Background *RBB = new Rolling_Ball_Background()
-    cdef Image *cframe = new Image(&frame[0], 2048, 2048) 
+    cdef Image *cframe = new Image(&frame[0], n, n) 
     RBB.run(deref(cframe), rd, &ret[0])
     del RBB
     del cframe
@@ -76,9 +78,9 @@ def build_Background(np.ndarray[int, ndim=1, mode="c"] frame not None,
 
 def build_Background_8(np.ndarray[int, ndim=1, mode="c"] frame not None,
         np.ndarray[int, ndim=1, mode="c"] ret not None,
-        int rd)
+        int rd, int n):
     cdef Rolling_Ball_Background_8 *RBB = new Rolling_Ball_Background_8()
-    cdef Image *cframe = new Image(&frame[0], 2048, 2048) 
+    cdef Image *cframe = new Image(&frame[0], n, n) 
     RBB.run(deref(cframe), rd, &ret[0])
     del RBB
     del cframe

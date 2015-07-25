@@ -1,5 +1,6 @@
 import skimage.external.tifffile as tiff
 import numpy as np
+import os
 
 def load_tiff(sc, pwd, start_index=None, end_index=None):
     '''
@@ -13,7 +14,7 @@ def load_tiff(sc, pwd, start_index=None, end_index=None):
             if imgname.endswith('.tif'):
                 names.append(imgname)
         names = sorted(names, key = lambda x: int(filter(str.isdigit, x)))
-        if (start_index) and (stop_index) and (0 <= start_index < end_index) and (start_index < end_index <= len(names)):
+        if (start_index) and (end_index) and (0 <= start_index < end_index) and (start_index < end_index <= len(names)):
             names = names[start_index:end_index]
         n = len(names)
         def func(name):

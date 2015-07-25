@@ -7,7 +7,9 @@
 import skimage.external.tifffile as tiff
 import numpy as np
 import math
+from MEHI.utils.tool import exeTime
 
+@exeTime
 def stripe_removal(img_stack):
     '''
     Usage:
@@ -17,15 +19,16 @@ def stripe_removal(img_stack):
     import skimage.morphology as mor
     def func(frame):
         _dtype = frame.dtype
-        kernel = nor.disk(3)
+        kernel = mor.disk(3)
         frameWP = frame - mor.white_tophat(frame, kernel) * (mor.white_tophat(frame, kernel) > 1000).astype(float)
         kernel = mor.rectangle(25, 1)
         closed = mor.closing(frameWP, kernel)
         opened = mor.opening(closed, kernel)
         result = ((frameWP.astype(float) / opened.astype(float)) * 3000.0)
         return result.astype(_dtype)
-    return map(func, img_stack).astype(img_stack[0].dtype)
+    return np.array(map(func, img_stack)).astype(img_stack[0].dtype)
 
+@exeTime
 def intensity_normalization(img_stack, dtype=None):
     '''
     Usage:
@@ -49,17 +52,19 @@ def intensity_normalization(img_stack, dtype=None):
         else:
             return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*65535, frame)).astype(np.uint16)
     if dtype == 8:
-        return map(func8, img_stack).astype(np.uint8)
+        return np.array(map(func8, img_stack)).astype(np.uint8)
     elif dtype == 16:
-        return map(func16, img_stack).astype(np.uint16)
+        return np.array(map(func16, img_stack)).astype(np.uint16)
     else:
-        return map(funca, img_stack).astype(img_stack[0].dtype)
+        return np.array(map(funca, img_stack)).astype(img_stack[0].dtype)
 
+@exeTime
 def flip(img_stack):
     def func(frame):
         return frame[:,::-1]
-    return map(func,img_stack)
+    return np.array(map(func,img_stack))
     
+@exeTime
 def invert(img_stack):
     def func(frame):
         if frame.dtype == np.uint8:
@@ -68,8 +73,9 @@ def invert(img_stack):
             return map(lambda p: 65535-p, frame)
         else :
             return map(lambda p: p, frame)
-    return map(func, img_stack)
+    return np.array(map(func, img_stack))
 
+@exeTime
 def black_tophat(img_stack, size=15):
     '''
     Usage:
@@ -81,8 +87,9 @@ def black_tophat(img_stack, size=15):
     import skimage.morphology as mor
     def func(frame):
         return mor.black_tophat(frame, mor.disk(size))
-    return map(func, img_stack)
+    return np.array(map(func, img_stack))
 
+@exeTime
 def subtract_Background(img_stack, size=10):
     '''
     Usage:
@@ -90,11 +97,12 @@ def subtract_Background(img_stack, size=10):
     args:
      - radius: the smooth size
     '''
-    from MEHI.udf.SB import subtract_Background
+    from MEHI.udf._subtract_bg import subtract_Background
     def func(frame):
         return subtract_Background(frame, size)
-    return map(func, img_stack)
+    return np.array(map(func, img_stack))
 
+@exeTime
 def shrink(img_stack, shrink_size=2):
     def func(frame):
         _X,_Y = frame.shape
@@ -104,7 +112,7 @@ def shrink(img_stack, shrink_size=2):
             for j in range(_sY):
                 shrink_frame[i][j] = sum(frame[i*shrink_size:(i+1)*shrink_size,j*shrink_size:(j+1)*shrink_size].flatten()) / (shrink_size*shrink_size)
         return shrink_frame.astype(frame.dtype)
-    return map(func, img_stack)
+    return np.array(map(func, img_stack))
 
         
 if __name__ == '__main__':

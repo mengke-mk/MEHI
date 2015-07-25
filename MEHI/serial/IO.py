@@ -1,5 +1,13 @@
+################################
+# Author   : septicmk
+# Date     : 2015/07/25 10:44:53
+# FileName : IO.py
+################################
+
 import skimage.external.tifffile as tiff
+from MEHI.utils.tool import exeTime,bar
 import numpy as np
+import os
 
 @exeTime
 def load_tiff(pwd, start_index=None, end_index=None):

@@ -22,10 +22,11 @@ def content_fusion(rdd, sgm1=44, sgm2=81):
         tmp1 = gaussian_filter(tmp1*tmp1,sgm2)
         tmp2 = frame2 - gaussian_filter(frame2,sgm1)
         tmp2 = gaussian_filter(tmp2*tmp2,sgm2)
-        return (tmp1*frame1 + frame1*tmp1)/(tmp1+tmp2)
+        ret = (tmp1*frame1 + frame1*tmp1)/(tmp1+tmp2)
+        ret = ret.astype(frame1.dtype)
+        return ret
     rdd = rdd.map(func)
     fused_img = np.squeeze(np.array(rdd.collect()))
-    fused_img = fused_img.astype(fused_img.dtype)
     return fused_img
 
 def wavelet_fusion(rdd, level=5):

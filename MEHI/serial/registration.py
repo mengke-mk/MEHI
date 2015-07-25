@@ -6,13 +6,15 @@
 
 import numpy as np
 import math
+from MEHI.utils.tool import exeTime
+
 
 def _generate_H(imgA, imgB):
     '''
     Usage:
      - calc the grey level histogram of imgA&B
     '''
-    H = np.zeros((255,255))
+    H = np.zeros((256,256))
     _X, _Y = imgA.shape
     for i in range(_X):
         for j in range(_Y):
@@ -32,12 +34,11 @@ def _mutual_info(H):
     IAB = HA + HB - HAB
     return -IAB
 
-def _PV_interpolation(H ,p, q):
+def _PV_interpolation(H ,p, q, imgA, imgB):
     '''
     Usage:
      - update the grey level histogram
     '''
-    imgA, imgB = imgA, imgB
     _X, _Y = imgA.shape
     px, py = p
     qx, qy = q
@@ -75,11 +76,11 @@ def _update(vec, imgA, imgB):
             q = np.dot(U, p)
             p = (p[0],p[1])
             q = (q[0],q[1])
-            _PV_interpolation(_H, p, q)
+            _PV_interpolation(_H, p, q, imgA, imgB)
     return _mutual_info(_H)
 
 def _trans(frame, vec):
-    from MEHI.udf.TRANS import trans
+    from MEHI.udf._trans import trans
     frame = frame.copy(order='C')
     ret = np.zeros_like(frame)
     U = _get_trans(vec)
@@ -105,7 +106,7 @@ def c_powell(imgA, imgB ,vec0):
     ditto
     '''
     import scipy.optimize as sciop
-    from MEHI.udf.registration import update
+    from MEHI.udf._update import update
     def cb(xk):
         print xk
     ret = sciop.fmin_powell(update, vec0, args=(imgA,imgB), callback=cb)
@@ -119,10 +120,10 @@ def execute(img_stack, vec):
     '''
     def func(frame):
         ret = []
-        ret.append(trans(frame, vec))
+        ret.append(_trans(frame, vec))
         ret = np.array(ret)
         return ret
-    return map(func, img_stack)
+    return np.array(map(func, img_stack))
 
 if __name__ == '__main__':
     pass

@@ -8,9 +8,10 @@ from MEHI.serial.preprocess import *
 from MEHI.serial.IO import load_tiff
 from test_utils import LocalTestCase
 import numpy as np
+import os
 
-L_pwd = os.path.abspath('.') + 'test_data/L_side/'
-R_pwd = os.path.abspath('.') + 'test_data/R_side/'
+L_pwd = os.path.abspath('.') + '/test_data/L_side/'
+R_pwd = os.path.abspath('.') + '/test_data/R_side/'
 
 class LocalTestPreprocessCase(LocalTestCase):
     def setUp(self):
@@ -22,12 +23,12 @@ class LocalTestPreprocessCase(LocalTestCase):
         super(LocalTestPreprocessCase, self).tearDown()
 
 class TestSerialPreprocess(LocalTestPreprocessCase):
-    def test_stripe_removal():
-        ret = stripe_removal(self.self.L_imgs)
-        assert (ret.shape == self.self.L_imgs.shape) 
-        assert (ret.dtype == self.self.L_imgs.dtype)
+    def test_stripe_removal(self):
+        ret = stripe_removal(self.L_imgs)
+        assert (ret.shape == self.L_imgs.shape) 
+        assert (ret.dtype == self.L_imgs.dtype)
     
-    def test_intensity_normalization():
+    def test_intensity_normalization(self):
         ret = intensity_normalization(self.L_imgs)
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == self.L_imgs.dtype)
@@ -38,27 +39,27 @@ class TestSerialPreprocess(LocalTestPreprocessCase):
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == np.uint16)
     
-    def test_flip():
+    def test_flip(self):
         ret = flip(self.L_imgs)
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == self.L_imgs.dtype)
     
-    def test_invert():
+    def test_invert(self):
         ret = invert(self.L_imgs)
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == self.L_imgs.dtype)
     
-    def test_black_tophat():
+    def test_black_tophat(self):
         ret = black_tophat(self.L_imgs)
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == self.L_imgs.dtype)
     
-    def test_subtract_Background():
+    def test_subtract_Background(self):
         ret = subtract_Background(self.L_imgs)
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == self.L_imgs.dtype)
     
-    def test_shrink():
+    def test_shrink(self):
         ret = shrink(self.L_imgs)
         assert (ret.dtype == self.L_imgs.dtype)
         assert (ret.shape == (10, 256, 256))

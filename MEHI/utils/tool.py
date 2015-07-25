@@ -72,6 +72,7 @@ def bar(level):
      - this will show a progress bar
      - e.g. bar('info')(msg, i, 100)
     '''
+    from MEHI.utils.configuration import loglevel
     if level in loglevel:
         def wraper(msg, i, end):
             if i <= end:

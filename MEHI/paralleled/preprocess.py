@@ -17,7 +17,7 @@ def stripe_removal(rdd):
     import skimage.morphology as mor
     def func(frame):
         _dtype = frame.dtype
-        kernel = nor.disk(3)
+        kernel = mor.disk(3)
         frameWP = frame - mor.white_tophat(frame, kernel) * (mor.white_tophat(frame, kernel) > 1000).astype(float)
         kernel = mor.rectangle(25, 1)
         closed = mor.closing(frameWP, kernel)
@@ -90,7 +90,7 @@ def subtract_Background(rdd, size=10):
     args:
      - radius: the smooth size
     '''
-    from MEHI.udf.SB import subtract_Background
+    from MEHI.udf._subtract_bg import subtract_Background
     def func(frame):
         return subtract_Background(frame, size)
     return rdd.map(func)

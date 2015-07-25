@@ -25,12 +25,18 @@ if __name__ == '__main__':
     from setuptools import find_packages, setup
     from setuptools.extension import Extension
     from setuptools.command.build_ext import build_ext
+    import numpy
     extensions =[
-        Extension("MEHI.udf.SB",
-            sources=["MEHI/udf/_subtract_bg.pyx","MEHI/udf/_subtract_bf_c.cpp"],
+        Extension("MEHI.udf._subtract_bg",
+            sources=["MEHI/udf/_subtract_bg.pyx","MEHI/udf/_subtract_bg_c.cpp"],
+            inlcude_dirs=[numpy.get_include()],
             language="c++"),
-        Extension("MEHI.udf.TRANS",
-            sources=["MEHI/udf/_trans.pyx","MEHI/udf/_trans_c.c"])
+        Extension("MEHI.udf._trans",
+            sources=["MEHI/udf/_trans.pyx","MEHI/udf/_trans_c.c"],
+            include_dirs=[numpy.get_include()]),
+        Extension("MEHI.udf._update",
+            sources=["MEHI/udf/_update.pyx", "MEHI/udf/_update_c.c"],
+            include_dirs=[numpy.get_include()]),
     ]
     from Cython.Build import cythonize
     extensions = cythonize(extensions)

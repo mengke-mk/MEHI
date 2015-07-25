@@ -1,5 +1,6 @@
 #include <math.h>
-void c_trans(unsigned char* frame, double *U, unsigned char *ret, int m){
+
+void c_trans8(unsigned char* frame, double *U, unsigned char *ret, int m){
     int i, j;
     int x, y;
     for (i = 0; i < m; i++){

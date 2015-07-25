@@ -5,8 +5,10 @@
 ################################
 
 import numpy as np
+from MEHI.utils.tool import exeTime
 import math
 
+@exeTime
 def content_fusion(img_stack, sgm1=44, sgm2=81): 
     '''
     Usage:
@@ -22,11 +24,13 @@ def content_fusion(img_stack, sgm1=44, sgm2=81):
         tmp1 = gaussian_filter(tmp1*tmp1,sgm2)
         tmp2 = frame2 - gaussian_filter(frame2,sgm1)
         tmp2 = gaussian_filter(tmp2*tmp2,sgm2)
-        return (tmp1*frame1 + frame1*tmp1)/(tmp1+tmp2)
-    fused_img = map(func, img_stack)
-    fused_img = fused_img.astype(fused_img[0].dtype)
+        ret = (tmp1*frame1 + frame1*tmp1)/(tmp1+tmp2)
+        ret = ret.astype(frame1.dtype)
+        return ret
+    fused_img = np.array(map(func, img_stack))
     return fused_img
 
+@exeTime
 def wavelet_fusion(img_stack, level=5):
     '''
     Usage:
@@ -59,7 +63,7 @@ def wavelet_fusion(img_stack, level=5):
         elif frame1.dtype == np.uint8:
             fuse_img = fuse_img.clip(0,255).astype(np.uint8)
         return fuse_img
-    fused_img = map(func, img_stack)
+    fused_img = np.array(map(func, img_stack))
     fused_img = fused_img.astype(fused_img[0].dtype)
     return fused_img
     
