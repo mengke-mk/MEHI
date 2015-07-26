@@ -30,16 +30,16 @@ def load_tiff(sc, pwd, start_index=None, end_index=None):
         return tiff.imread(pwd)
 
 @exeTime
-def save_tiff(img_stack, name, sc, pwd=None):
+def save_tiff(img_stack, pwd):
     '''
     Usage:
      - write the img_stack
     '''
-    if not pwd:
-        tiff.imsave(name, img_stack) 
+    if pwd.endswith('.tif'):
+        tiff.imsave(pwd, img_stack) 
     else:
-        for z,frame in enumerate(img_stack):
-            fname = pwd + name + '_%03d' % (z+1) + '.tif'
+        for z, frame in enumerate(img_stack):
+            fname = pwd + '_%03d' % (z+1) + '.tif'
             dir, file = os.path.split(fname)
             if not os.path.exists(dir):
                 os.makedirs(dir)

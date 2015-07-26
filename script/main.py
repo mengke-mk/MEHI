@@ -9,9 +9,10 @@ from MEHI.paralleled import registration as reg
 from MEHI.paralleled import fusion as fus
 from MEHI.paralleled import IO
 from pyspark import SparkContext, SparkConf
-from MEHI.utils.tools import exeTime, log
+from MEHI.utils.tool import exeTime, log
+import numpy as np
 
-conf = SparkConf().setAppName('test').setMaster('local[4]').set('spark.executor.memory','80g').set('spark.driver.maxResultSize','80g').set('spark.driver.memory','80g').set('spark.local.dir','/dev/shm').set('spark.storage.memoryFraction','0.2').set('spark.default.parallelism','64')
+conf = SparkConf().setAppName('test').setMaster('local[4]').set('spark.executor.memory','80g').set('spark.driver.maxResultSize','80g').set('spark.driver.memory','80g').set('spark.local.dir','/dev/shm').set('spark.storage.memoryFraction','0.2').set('spark.default.parallelism','6')
 sc = SparkContext(conf=conf)
 
 pwd = '/mnt/md_5T/Galaxy_inst/pku_Galaxy/galaxy/database/ftp/liuyao@ncic.ac.cn'
@@ -42,15 +43,17 @@ rddB = reg.execute(rddB, vec)
 log('info')('registration over ...')
 
 log('info')('fusion start ...')
-L_img_stack = np.array(rddA.collect())
-R_img_stack = np.array(rddB.collect())
+L_img_stack = np.squeeze(np.array(rddA.collect()))
+R_img_stack = np.squeeze(np.array(rddB.collect()))
+print L_img_stack.shape
 img_stack = zip(L_img_stack, R_img_stack)
+print img_stack
 rdd = sc.parallelize(img_stack)
 fused_img = fus.wavelet_fusion(rdd)
 log('info')('fusion over ...')
 
 log('info')('saving ...')
-IO.save_tiff(fused_img, 'fus', pwd+'/0401fusion/')
+IO.save_tiff(fused_img, pwd+'/0401fusion/fus')
 
 log('info')('subtract background start ...')
 rdd = sc.parallelize(fused_img)
@@ -58,7 +61,4 @@ sb_img = np.array(prep.subtract_Background(rdd).collect())
 log('info')('sbutract background over ... ')
 
 log('info')('saving ...')
-IO.save_tiff(sb_img, 'sub', pwd+'/0401fusion/')
-
-
-
+IO.save_tiff(sb_img, pwd+'/0401fusion/sub')

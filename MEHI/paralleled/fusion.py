@@ -63,7 +63,6 @@ def wavelet_fusion(rdd, level=5):
         return fuse_img
     rdd = rdd.map(func)
     fused_img = np.squeeze(np.array(rdd.collect()))
-    fused_img = fused_img.astype(fused_img.dtype)
     return fused_img
     
 if __name__ == '__main__':
