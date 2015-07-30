@@ -40,3 +40,15 @@ class TestSerialRegistration(LocalTestRegistrationCase):
     def test_execute(self):
         ret = execute(self.L_imgs, self.vec0) 
         assert_equals(sum(self.L_imgs.flatten()), sum(ret.flatten()))
+
+    def test_mutual_information(self):
+        ret = mutual_information(self.L_imgs, 0, self.vec0, self.imgA, self.imgB)
+        assert (ret.shape == self.L_imgs.shape)
+        assert (ret.dtype == self.L_imgs.dtype)
+
+    def test_cross_correlation(self):
+        img_stack = zip(self.L_imgs, self.R_imgs)
+        ret = cross_correlation(img_stack)
+        assert (ret.shape == self.L_imgs.shape)
+
+

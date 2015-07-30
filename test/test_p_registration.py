@@ -42,3 +42,19 @@ class TestParalleledRegistration(PySparkTestRegistrationCase):
         ret = execute(rdd, self.vec0).collect() 
         ret = np.array(ret)
         assert_equals(sum(self.L_imgs.flatten()), sum(ret.flatten()))
+
+    def test_mutual_information(self):
+        rdd = self.sc.parallelize(self.L_imgs)
+        ret = mutual_information(rdd, 0, self.vec0, self.imgA, self.imgB).collect()
+        ret = np.array(ret)
+        assert (ret.shape == self.L_imgs.shape)
+        assert (ret.dtype == self.L_imgs.dtype)
+
+    def test_cross_correlation(self):
+        img_stack = zip(self.L_imgs, self.R_imgs)
+        rdd = self.sc.parallelize(img_stack)
+        ret = cross_correlation(rdd).collect()
+        ret = np.array(ret)
+        assert (ret.shape == self.L_imgs.shape)
+
+

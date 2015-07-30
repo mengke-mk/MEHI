@@ -43,5 +43,15 @@ def save_tiff(img_stack, pwd):
             dir, file = os.path.split(fname)
             if not os.path.exists(dir):
                 os.makedirs(dir)
-                tiff.imsave(fname, frame)
+            tiff.imsave(fname, frame)
 
+@exeTime
+def load_table(pwd):
+    import pandas as pd
+    return pd.read_pickle(pwd)
+
+@exeTime
+def save_table(tab, pwd):
+    import pandas as pd
+    pd.to_pickle(pwd)
+    pd.to_csv(pwd)

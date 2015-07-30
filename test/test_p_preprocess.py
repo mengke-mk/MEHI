@@ -78,4 +78,18 @@ class TestParalleledPreprocess(PySparkTestPreprocessCase):
         ret = np.array(ret)
         assert (ret.dtype == self.L_imgs.dtype)
         assert (ret.shape == (10, 256, 256))
+    
+    def test_projection(self):
+        maxp = projection(self.L_imgs, 'max')
+        minp = projection(self.L_imgs, 'min')
+        meanp = projection(self.L_imgs, 'mean')
+        assert (maxp.dtype == self.L_imgs.dtype and maxp.shape == self.L_imgs[0].shape)
+        assert (minp.dtype == self.L_imgs.dtype and minp.shape == self.L_imgs[0].shape)
+        assert (meanp.shape == self.L_imgs[0].shape)
+
+    def test_smooth(self):
+        rdd = self.sc.parallelize(self.L_imgs)
+        ret = np.array(smooth(rdd, 10).collect())
+        assert (ret.dtype == self.L_imgs.dtype)
+        assert (ret.shape == self.L_imgs.shape)
 

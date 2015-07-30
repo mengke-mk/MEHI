@@ -90,7 +90,7 @@ def black_tophat(img_stack, size=15):
     return np.array(map(func, img_stack))
 
 @exeTime
-def subtract_Background(img_stack, size=10):
+def subtract_Background(img_stack, size=12):
     '''
     Usage:
      - subtrackt Background (based on C)
@@ -113,6 +113,28 @@ def shrink(img_stack, shrink_size=2):
                 shrink_frame[i][j] = sum(frame[i*shrink_size:(i+1)*shrink_size,j*shrink_size:(j+1)*shrink_size].flatten()) / (shrink_size*shrink_size)
         return shrink_frame.astype(frame.dtype)
     return np.array(map(func, img_stack))
+
+@exeTime
+def projection(img_stack, method='max'):
+    if method == 'max':
+        proj = np.max(img_stack, axis=0)
+    elif method == 'min':
+        proj = np.min(img_stack, axis=0)
+    elif method == 'mean':
+        proj = np.mean(img_stack, axis=0)
+    else:
+        raise "Bad Projection Method", method
+    return proj
+
+def smooth(img_stack, smooth_size):
+    from skimage.filters import rank
+    from skimage.morphology import disk
+    def func(frame):
+        smoothed = rank.median(frame,disk(smooth_size))
+        smoothed = rank.enhance_contrast(smoothed, disk(smooth_size))
+        return smoothed
+    return np.array(map(func,img_stack))
+
 
         
 if __name__ == '__main__':

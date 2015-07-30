@@ -37,6 +37,9 @@ if __name__ == '__main__':
         Extension("MEHI.udf._update",
             sources=["MEHI/udf/_update.pyx", "MEHI/udf/_update_c.c"],
             include_dirs=[numpy.get_include()]),
+        Extension("MEHI.udf._moment",
+            sources=["MEHI/udf/_moment.pyx"],
+            inlcude_dirs=[numpy.get_include()]),
     ]
     from Cython.Build import cythonize
     extensions = cythonize(extensions)

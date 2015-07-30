@@ -6,7 +6,9 @@
 
 import numpy as np
 import math
+from MEHI.utils.tool import exeTime
 
+@exeTime
 def content_fusion(rdd, sgm1=44, sgm2=81): 
     '''
     Usage:
@@ -29,6 +31,7 @@ def content_fusion(rdd, sgm1=44, sgm2=81):
     fused_img = np.squeeze(np.array(rdd.collect()))
     return fused_img
 
+@exeTime
 def wavelet_fusion(rdd, level=5):
     '''
     Usage:

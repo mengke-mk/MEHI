@@ -7,6 +7,7 @@
 import skimage.external.tifffile as tiff
 import numpy as np
 import math
+from MEHI.utils.tool import exeTime
 
 def stripe_removal(rdd):
     '''
@@ -83,7 +84,7 @@ def black_tophat(rdd, size=15):
         return mor.black_tophat(frame, mor.disk(size))
     return rdd.map(func)
 
-def subtract_Background(rdd, size=10):
+def subtract_Background(rdd, size=12):
     '''
     Usage:
      - subtrackt Background (based on C)
@@ -105,6 +106,28 @@ def shrink(rdd, shrink_size=2):
                 shrink_frame[i][j] = sum(frame[i*shrink_size:(i+1)*shrink_size,j*shrink_size:(j+1)*shrink_size].flatten()) / (shrink_size*shrink_size)
         return shrink_frame.astype(frame.dtype)
     return rdd.map(func)
+
+@exeTime
+def projection(img_stack, method='max'):
+    if method == 'max':
+        proj = img_stack.max(axis=0)
+    elif method == 'min':
+        proj = img_stack.min(axis=0)
+    elif method == 'mean':
+        proj = img_stack.mean(axis=0)
+    else:
+        raise "Bad Projection Method", method
+    return proj
+
+def smooth(rdd, smooth_size):
+    from skimage.morphology import disk
+    from skimage.filters import rank
+    def func(frame):
+        smoothed = rank.median(frame,disk(smooth_size))
+        smoothed = rank.enhance_contrast(smoothed, disk(smooth_size))
+        return smoothed
+    return rdd.map(func)
+
        
 if __name__ == '__main__':
     print 'OK'

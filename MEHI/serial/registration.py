@@ -101,7 +101,7 @@ def p_powell(imgA, imgB ,vec0):
 
 
 @exeTime
-def c_powell(imgA, imgB ,vec0):
+def c_powell(imgA, imgB ,vec0, ftol=0.01):
     '''
     ditto
     '''
@@ -109,7 +109,7 @@ def c_powell(imgA, imgB ,vec0):
     from MEHI.udf._update import update
     def cb(xk):
         print xk
-    ret = sciop.fmin_powell(update, vec0, args=(imgA,imgB), callback=cb)
+    ret = sciop.fmin_powell(update, vec0, args=(imgA,imgB), callback=cb, ftol=ftol)
     return ret
 
 @exeTime
@@ -119,10 +119,33 @@ def execute(img_stack, vec):
      - Affine Transform the img stack using vec
     '''
     def func(frame):
-        ret = []
-        ret.append(_trans(frame, vec))
+        ret = _trans(frame, vec)
         ret = np.array(ret)
         return ret
+    return np.array(map(func, img_stack))
+
+@exeTime
+def mutual_information(img_stack, index, vec=None, *args):
+    if not vec:
+        return execute(img_stack, vec)
+    else:
+        if len(args) < 2:
+            raise "What the FXCK?"
+        imgA, imgB = args[0], args[1]
+        ftol = 0.1 if len(args) < 3 else args[2]
+        vec = c_powell(imgA, imgB, [0,0,0,1,1,0,0], ftol)
+        return execute(img_stack, vec)
+          
+@exeTime
+def cross_correlation(img_stack):
+    from skimage.feature import register_translation
+    from scipy.ndimage import fourier_shift
+    def func(dframe):
+        frame1,frame2 = dframe[0], dframe[1]
+        shift,error,diffphase = register_translation(frame1, frame2, 10)
+        tframe = fourier_shift(np.fft.fftn(frame2), shift)
+        tframe = np.fft.ifftn(tframe)
+        return tframe.real
     return np.array(map(func, img_stack))
 
 if __name__ == '__main__':
