@@ -1,27 +1,27 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/07/25 16:14:09
-# FileName : main.py
+# Date     : 2015/08/12 14:04:49
+# FileName : fus.py
 ################################
 
 from MEHI.paralleled import preprocess as prep
 from MEHI.paralleled import registration as reg
 from MEHI.paralleled import fusion as fus
 from MEHI.serial import preprocess as _prep
-from MEHI.serial import IO
+from MEHI.paralleled import IO
 from pyspark import SparkContext, SparkConf
 from MEHI.utils.tool import exeTime, log
 import numpy as np
 import time
 
-conf = SparkConf().setAppName('test').setMaster('local[48]').set('spark.executor.memory','20g').set('spark.driver.maxResultSize','20g').set('spark.driver.memory','40g').set('spark.local.dir','/dev/shm').set('spark.storage.memoryFraction','0.2').set('spark.default.parallelism','128')
+conf = SparkConf().setAppName('fuse').setMaster('local[128]').set('spark.executor.memory','20g').set('spark.driver.maxResultSize','20g').set('spark.driver.memory','40g').set('spark.local.dir','/dev/shm').set('spark.storage.memoryFraction','0.2').set('spark.default.parallelism','512')
 sc = SparkContext(conf=conf)
 
-pwd = '/mnt/md_5T/Galaxy_inst/pku_Galaxy/galaxy/database/ftp/liuyao@ncic.ac.cn'
+pwd = '/mnt/xfs_snode21'
 s = time.time()
 log('info')('loading tiff ...')
-L_img_stack = IO.load_tiff(pwd+'/0401RawData/1-L-Red')
-R_img_stack = IO.load_tiff(pwd+'/0401RawData/1-R-Red')
+L_img_stack = IO.load_tiff(sc, pwd+'/0401RawData/1-L-Red')
+R_img_stack = IO.load_tiff(sc, pwd+'/0401RawData/1-R-Red')
 rddA = sc.parallelize(L_img_stack)
 rddB = sc.parallelize(R_img_stack)
 log('info')('tiff load over...')
@@ -47,12 +47,9 @@ img_stack = zip(L_img_stack, R_img_stack)
 rdd = sc.parallelize(img_stack)
 fused_img = fus.wavelet_fusion(rdd)
 log('info')('fusion over ...')
-
-log('info')('saving ...')
-IO.save_tiff(fused_img, pwd+'/0401fusion/fus_dev/fus')
-
+#log('info')('saving ...') #IO.save_tiff(fused_img, pwd+'/0401fusion/fus_dev/fus') 
 #log('info')('subtract background start ...')
-#fused_img = IO.load_tiff(pwd+'/0401fusion/fus_dev')
+#fused_img = IO.load_tiff(sc ,pwd+'/0401fusion/fus_dev')
 #rdd = sc.parallelize(fused_img)
 #rdd = prep.intensity_normalization(rdd)
 #rdd = prep.subtract_Background(rdd)

@@ -38,6 +38,11 @@ class TestSerialPreprocess(LocalTestPreprocessCase):
         ret = intensity_normalization(self.L_imgs, 16) 
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == np.uint16)
+
+    def test_saturation(self):
+        ret = saturation(self.L_imgs, 0.1) 
+        assert(ret.shape == self.L_imgs.shape)
+        assert(ret.dtype == self.L_imgs.dtype)
     
     def test_flip(self):
         ret = flip(self.L_imgs)

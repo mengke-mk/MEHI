@@ -20,7 +20,7 @@ def load_tiff(sc, pwd, start_index=None, end_index=None):
             names = names[start_index:end_index]
         n = len(names)
         def func(name):
-            img_pwd = os.path.join(pwd, imgname)
+            img_pwd = os.path.join(pwd, name)
             if img_pwd.endswith('.tif'):
                 img = tiff.imread(img_pwd)
             return img

@@ -7,7 +7,7 @@ import numpy as np
 cimport numpy as np
 import cython
 
-cpdef moment(double[:,:,:] image):
+cpdef _moment(double[:,:,:] image):
     cdef double[:] mu = np.zeros((4,),dtype = np.double)
     for x in range(image.shape[0]):
         for y in range(image.shape[1]):
@@ -21,4 +21,7 @@ cpdef moment(double[:,:,:] image):
     mu[2] = mu[2]/mu[0]
     mu[3] = mu[3]/mu[0]
     return np.asarray(mu)
+
+def moment(image):
+    return _moment(image.astype(np.double))
 

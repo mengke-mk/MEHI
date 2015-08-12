@@ -30,50 +30,35 @@ def stripe_removal(img_stack):
 
 @exeTime
 def intensity_normalization(img_stack, dtype=None):
-    '''
-    Usage:
-     - adjust the intensity
-    args:
-     - num: if you wanna 16-bit output, just let num = 16,  
-    '''
-    def func8(frame):
-        max_intensity = max(frame.flatten())
-        min_intensity = min(frame.flatten())
-        return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*255, frame)).astype(np.uint8)
-    def func16(frame):
-        max_intensity = max(frame.flatten())
-        min_intensity = min(frame.flatten())
-        return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*65535, frame)).astype(np.uint16)
-    def funca(frame):
-        max_intensity = max(frame.flatten())
-        min_intensity = min(frame.flatten())
-        if frame.dtype == np.uint8:
-            return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*255, frame)).astype(np.uint8)
-        else:
-            return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*65535, frame)).astype(np.uint16)
-    if dtype == 8:
-        return np.array(map(func8, img_stack)).astype(np.uint8)
-    elif dtype == 16:
-        return np.array(map(func16, img_stack)).astype(np.uint16)
-    else:
-        return np.array(map(funca, img_stack)).astype(img_stack[0].dtype)
+    from MEHI.udf._intensity import normalization
+    def func(frame):
+        return normalization(frame, dtype)
+    return np.array(map(func, img_stack))
+
+@exeTime
+def saturation(rdd, precent):
+    from MEHI.udf._intensity import saturation
+    def func(frame):
+        return saturation(frame, precent)
+    return np.array(map(func, img_stack))
 
 @exeTime
 def flip(img_stack):
     def func(frame):
         return frame[:,::-1]
-    return np.array(map(func,img_stack))
+    return np.array(map(func, img_stack))
     
 @exeTime
 def invert(img_stack):
     def func(frame):
         if frame.dtype == np.uint8:
-            return map(lambda p: 255-p, frame)
+            return np.array(map(lambda p: 255-p, frame))
         elif frame.dtype == np.uint16:
-            return map(lambda p: 65535-p, frame)
+            return np.array(map(lambda p: 65535-p, frame))
         else :
-            return map(lambda p: p, frame)
+            return np.array(map(lambda p: p, frame))
     return np.array(map(func, img_stack))
+
 
 @exeTime
 def black_tophat(img_stack, size=15):

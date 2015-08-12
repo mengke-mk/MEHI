@@ -37,7 +37,7 @@ def threshold(img_stack, method='adaptive', *args):
         raise "Bad Threshold Method", method
 
 def peak_filter(image_stack, smooth_size):
-    from skimage.morphology import binary_opening
+    from skimage.morphology import disk, binary_opening
     def func(frame):
         opened = binary_opening(frame, disk(smooth_size))
         opened = opened & frame

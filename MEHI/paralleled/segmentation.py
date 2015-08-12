@@ -21,8 +21,7 @@ def threshold(rdd, method='adaptive', *args):
     def duel(frame):
         threshold = threshold_otsu(frame)
         binary1 = frame > threshold
-        tframe = frame - binary1 * frame
-        frame = tframe + binary1 * frame * max(tframe.flatten())/max(frame.flatten())
+        frame = frame - binary1 * frame
         threshold = threshold_otsu(frame)
         binary2 = frame > threshold
         binary = binary2
@@ -38,7 +37,7 @@ def threshold(rdd, method='adaptive', *args):
         raise "Bad Threshold Method", method
 
 def peak_filter(rdd, smooth_size):
-    from skimage.morphology import binary_opening
+    from skimage.morphology import disk, binary_opening
     def func(frame):
         opened = binary_opening(frame, disk(smooth_size))
         opened = opened & frame

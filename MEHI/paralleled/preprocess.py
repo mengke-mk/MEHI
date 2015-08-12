@@ -28,33 +28,17 @@ def stripe_removal(rdd):
     return rdd.map(func)
 
 def intensity_normalization(rdd, dtype=None):
-    '''
-    Usage:
-     - adjust the intensity
-    args:
-     - num: if you wanna 16-bit output, just let num = 16,  
-    '''
-    def func8(frame):
-        max_intensity = max(frame.flatten())
-        min_intensity = min(frame.flatten())
-        return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*255, frame)).astype(np.uint8)
-    def func16(frame):
-        max_intensity = max(frame.flatten())
-        min_intensity = min(frame.flatten())
-        return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*65535, frame)).astype(np.uint16)
-    def funca(frame):
-        max_intensity = max(frame.flatten())
-        min_intensity = min(frame.flatten())
-        if frame.dtype == np.uint8:
-            return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*255, frame)).astype(np.uint8)
-        else:
-            return np.array(map(lambda x: ((x-min_intensity+.0)/(max_intensity - min_intensity))*65535, frame)).astype(np.uint16)
-    if dtype == 8:
-        return rdd.map(func8)
-    elif dtype == 16:
-        return rdd.map(func16)
-    else:
-        return rdd.map(funca)
+    from MEHI.udf._intensity import normalization
+    def func(frame):
+        return normalization(frame, dtype)
+    return rdd.map(func)
+
+def saturation(rdd, precent):
+    from MEHI.udf._intensity import saturation
+    def func(frame):
+        return saturation(frame, precent)
+    return rdd.map(func)
+        
 
 def flip(rdd):
     def func(frame):
@@ -64,11 +48,11 @@ def flip(rdd):
 def invert(rdd):
     def func(frame):
         if frame.dtype == np.uint8:
-            return map(lambda p: 255-p, frame)
+            return np.array(map(lambda p: 255-p, frame))
         elif frame.dtype == np.uint16:
-            return map(lambda p: 65535-p, frame)
+            return np.array(map(lambda p: 65535-p, frame))
         else :
-            return map(lambda p: p, frame)
+            return np.array(map(lambda p: p, frame))
     return rdd.map(func)
 
 def black_tophat(rdd, size=15):
