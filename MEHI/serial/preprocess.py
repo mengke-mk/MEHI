@@ -120,8 +120,36 @@ def smooth(img_stack, smooth_size):
         return smoothed
     return np.array(map(func,img_stack))
 
+@exeTime
+def blockshaped_all(img_stack, nrows, ncols):
+    def blockshaped(arr, nrows, ncols):
+        h, w = arr.shape
+        return (arr.reshape(h//nrows, nrows, -1, ncols)
+                   .swapaxes(1,2)
+                   .reshape(-1, nrows, ncols))
+    arr_list = []
+    for x in img_stack:
+        for frame in blockshaped(x, nrows, ncols):
+            arr_list.append(frame)
+    return np.array(arr_list)
 
-        
+@exeTime
+def recovershape_all(img_stack, nrows, ncols):
+    def recovershape(arr_list, nrows, ncols):
+        y = []
+        for i in range(nrows):
+            x = []
+            for j in range(ncols):
+                x.append(arr_list[i*ncols + j])
+            y.append(np.hstack(tuple(x)))
+        return np.vstack(tuple(y))
+    step = nrows*ncols
+    ori = []
+    for i in range(0,img_stack.shape[0],step):
+        arr = img_stack[i:i+step]
+        ori.append(recovershape(arr, nrows, ncols))
+    return np.array(ori)
+
 if __name__ == '__main__':
     print 'OK'
     pass
