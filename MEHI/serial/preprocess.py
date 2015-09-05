@@ -1,6 +1,6 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/07/23 20:10:23
+# Date     : 2015/09/05 16:55:37
 # FileName : preprocess.py
 ################################
 
@@ -11,11 +11,6 @@ from MEHI.utils.tool import exeTime
 
 @exeTime
 def stripe_removal(img_stack):
-    '''
-    Usage:
-     - remove the stripe
-     - (discarded)
-    '''
     import skimage.morphology as mor
     def func(frame):
         _dtype = frame.dtype
@@ -36,7 +31,7 @@ def intensity_normalization(img_stack, dtype=None):
     return np.array(map(func, img_stack))
 
 @exeTime
-def saturation(rdd, precent):
+def saturation(img_stack, precent):
     from MEHI.udf._intensity import saturation
     def func(frame):
         return saturation(frame, precent)

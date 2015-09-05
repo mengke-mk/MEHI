@@ -42,7 +42,7 @@ class TestSerialRegistration(LocalTestRegistrationCase):
         assert_equals(sum(self.L_imgs.flatten()), sum(ret.flatten()))
 
     def test_mutual_information(self):
-        ret = mutual_information(self.L_imgs, 0, self.vec0, self.imgA, self.imgB)
+        ret = mutual_information(self.L_imgs, self.imgA, self.imgB)
         assert (ret.shape == self.L_imgs.shape)
         assert (ret.dtype == self.L_imgs.dtype)
 

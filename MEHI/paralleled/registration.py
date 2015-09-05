@@ -1,6 +1,6 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/07/23 19:20:39
+# Date     : 2015/09/05 16:55:16
 # FileName : registration.py
 ################################
 
@@ -123,8 +123,8 @@ def execute(rdd, vec):
     return rdd.map(func)
 
 
-def mutual_information(rdd, index, vec=None, *args):
-    if not vec:
+def mutual_information(rdd, vec=None, *args):
+    if vec != None:
         return execute(rdd, vec)
     else:
         if len(args) < 2:

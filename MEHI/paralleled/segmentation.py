@@ -1,6 +1,6 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/08/16 16:17:14
+# Date     : 2015/09/05 16:55:23
 # FileName : segmentation.py
 ################################
 
@@ -11,6 +11,7 @@ import numpy as np
 def threshold(rdd, method='adaptive', *args):
     from skimage.filters import threshold_otsu, threshold_adaptive
     import scipy.ndimage as ndi
+    from MEHI.udf._phansalkar import phansalkar as _phansalkar
     def adaptive(frame):
         binary = threshold_adaptive(frame, block_size=block_size)
         #binary = ndi.binary_fill_holes(binary)
@@ -27,6 +28,9 @@ def threshold(rdd, method='adaptive', *args):
         binary2 = frame > threshold
         binary = binary2
         return binary
+    def phansalkar(frame):
+        binary = _phansalkar(frame, block_size)
+        return binary 
     if method=='adaptive':
         block_size = args[0]
         return rdd.map(adaptive)
@@ -34,17 +38,23 @@ def threshold(rdd, method='adaptive', *args):
         return rdd.map(otsu)
     elif method == 'duel':
         return rdd.map(duel)
+    elif method == 'phansalkar':
+        block_size = args[0]
+        return rdd.map(phansalkar)
     else:
         raise "Bad Threshold Method", method
 
 def peak_filter(rdd, smooth_size):
-    from skimage.morphology import disk, binary_opening
+    from skimage.morphology import disk, binary_opening, remove_small_objects
+    import scipy.ndimage as ndi
     def func(frame):
-        opened = binary_opening(frame, disk(smooth_size))
-        opened = opened & frame
-        return opened
+        frame = frame.astype(bool)
+        binary = remove_small_objects(frame, smooth_size)
+        #binary = ndi.binary_fill_holes(binary)
+        #opened = binary_opening(frame, disk(smooth_size))
+        #opened = opened & frame
+        return binary
     return rdd.map(func)
-
 
 def watershed(rdd, min_radius):
     from skimage.morphology import watershed, remove_small_objects

@@ -1,6 +1,6 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/07/23 19:20:39
+# Date     : 2015/09/05 16:55:40
 # FileName : registration.py
 ################################
 
@@ -125,8 +125,8 @@ def execute(img_stack, vec):
     return np.array(map(func, img_stack))
 
 @exeTime
-def mutual_information(img_stack, index, vec=None, *args):
-    if not vec:
+def mutual_information(img_stack, vec=None, *args):
+    if vec:
         return execute(img_stack, vec)
     else:
         if len(args) < 2:

@@ -1,3 +1,9 @@
+################################
+# Author   : septicmk
+# Date     : 2015/09/05 16:57:22
+# FileName : _trans.pyx
+################################
+
 import cython
 import numpy as np
 cimport numpy as np

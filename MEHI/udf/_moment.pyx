@@ -1,8 +1,9 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/07/29 19:45:27
+# Date     : 2015/09/05 16:58:36
 # FileName : _moment.pyx
 ################################
+
 import numpy as np
 cimport numpy as np
 import cython

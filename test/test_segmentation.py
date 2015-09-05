@@ -37,4 +37,4 @@ class TestSerialSegmentation(LocalTestSegmentationCase):
         binary = threshold(self.L_imgs, 'adaptive', 15)
         labeled_stack = watershed_3d(self.L_imgs, binary)
         assert (labeled_stack.shape == self.L_imgs.shape)
-        prop = properties(labeled_stack)
+        #prop = properties(labeled_stack)

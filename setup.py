@@ -43,6 +43,9 @@ if __name__ == '__main__':
         Extension("MEHI.udf._intensity",
             sources=["MEHI/udf/_intensity.pyx"],
             include_dirs=[numpy.get_include()]),
+        Extension("MEHI.udf._phansalkar",
+            sources=["MEHI/udf/_phansalkar.pyx", "MEHI/udf/_phansalkar_c.c"],
+            include_dirs=[numpy.get_include()]),
     ]
     from Cython.Build import cythonize
     extensions = cythonize(extensions)

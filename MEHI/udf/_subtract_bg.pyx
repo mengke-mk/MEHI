@@ -1,3 +1,9 @@
+################################
+# Author   : septicmk
+# Date     : 2015/09/05 16:57:13
+# FileName : _subtract_bg.pyx
+################################
+
 from cython.operator cimport dereference as deref
 import cython
 import numpy as np

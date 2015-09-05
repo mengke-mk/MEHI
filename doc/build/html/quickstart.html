@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. 快速开始 &mdash; MEHI 0.2 文档</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="MEHI 0.2 文档" href="index.html" />
+    <link rel="next" title="3. 预处理" href="preprocess.html" />
+    <link rel="prev" title="1. 安装" href="install.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="preprocess.html" title="3. 预处理"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="1. 安装"
+             accesskey="P">上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="quickstart">
+<span id="id1"></span><h1>2. 快速开始<a class="headerlink" href="#quickstart" title="永久链接至标题">¶</a></h1>
+<p>要让项目运作起来，需要自己搭建一个合理的 <cite>pipeline</cite> 自己调取数据，预处理，对准融合，分割。你可以把它们写在一个脚本中使用 <cite>python</cite> 来执行。</p>
+<div class="section" id="id2">
+<h2>2.1. 流程<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>处理图像的流程根据实际调整，并没有一个特定的标准，不过还是有一个大致的框架。依次是读取图像，预处理，对准，融合，分割识别，然后分析。其中可能穿插这一些特定的图像变换，比如 <cite>flip</cite> <cite>invert</cite> 之类的操作。</p>
+<div class="section" id="id3">
+<h3>2.1.1. 存取图像<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<p>首先是读取图像的 <cite>IO.load_tiff()</cite> ,通常有并行读取和串行读取两种方式，并行读取主要要传入参数 <cite>sc</cite> ,有时会发现串行读取反而比并行读取快，这是应为串行读取时会有cache，第一次读取之后之后相同的读取行为会快的多。另一方面，如果指定的读取数据后以 <cite>.tif</cite> 结尾则读取这一章，如果是以目录结尾则读取该目录下全部的 <cite>tif</cite> 并按名称排序，如果后面给上两个整数会读取指定的中间帧。</p>
+<p>至于保存图像 <cite>IO.save_tiff()</cite> ，同样如果以 <cite>.tif</cite> 结尾则保存到一格文件中，以目录结尾则以单张的形式保存，如果不以字符 <cite>/</cite> 结尾则会把其用作前缀。保存图像的并串行版本都是同一个函数。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">MEHI.serial</span> <span class="kn">import</span> <span class="n">_IO</span>
+<span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">IO</span>
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+
+<span class="n">pwd</span> <span class="o">=</span> <span class="s">&#39;/mnt/xfs_snode21/0401RawData/1-L-Red&#39;</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">()</span>
+
+<span class="n">img_stack</span> <span class="o">=</span> <span class="n">_IO</span><span class="o">.</span><span class="n">load_tiff</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span>
+<span class="n">img_stack</span> <span class="o">=</span> <span class="n">_IO</span><span class="o">.</span><span class="n">load_tiff</span><span class="p">(</span><span class="n">pwd</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">260</span><span class="p">)</span>
+
+<span class="n">img_stack</span> <span class="o">=</span> <span class="n">IO</span><span class="o">.</span><span class="n">load_tiff</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">pwd</span><span class="p">)</span>
+<span class="n">img_stack</span> <span class="o">=</span> <span class="n">IO</span><span class="o">.</span><span class="n">load_tiff</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">pwd</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">260</span><span class="p">)</span>
+
+<span class="c">#保存的图像将存为 fus_0001 fus_002 ... 的形式</span>
+<span class="n">IO</span><span class="o">.</span><span class="n">save_tiff</span><span class="p">(</span><span class="n">img_stack</span><span class="p">,</span> <span class="s">&#39;/mnt/xfs_snode21/0401TestData/fsuion/fus_&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>2.1.2. 预处理<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<p>预处理也包含并行和串行的版本，区别是并行的参数对对象是 <cite>RDD</cite> 而串行的参数对象是一个 <cite>ndarray</cite> 。我相信大多数情况下你都会选择使用并行的模式。预处理基本上重点要做的有 <strong>亮度平衡</strong> <strong>减背景</strong> <strong>翻转</strong> 等。注意对 <cite>Spark</cite> 而言，其处理模式是 <cite>Lazy</cite> 的，也就是说大多数情况下你得用 <cite>collect()</cite> 来得到处理的结果。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">preprocess</span> <span class="k">as</span> <span class="n">prep</span>
+<span class="kn">from</span> <span class="nn">MEHI.serial</span> <span class="kn">import</span> <span class="n">preprocess</span> <span class="k">as</span> <span class="n">_prep</span>
+
+<span class="c"># 并行模式</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">L_img_stack</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">intensity_normalization</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">subtract_Background</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+<span class="c"># 串行模式</span>
+<span class="n">img_stack</span> <span class="o">=</span> <span class="n">_prep</span><span class="o">.</span><span class="n">intensity_normalization</span><span class="p">(</span><span class="n">img_stack</span><span class="p">)</span>
+<span class="n">img_stack</span> <span class="o">=</span> <span class="n">_prep</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">img_stack</span><span class="p">)</span>
+<span class="n">img_stack</span> <span class="o">=</span> <span class="n">_prep</span><span class="o">.</span><span class="n">subtract_Background</span><span class="p">(</span><span class="n">img_stack</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>你会发现，并行和串行没什么不同的，只是传入的参数略有差别。</p>
+</div>
+<div class="section" id="id5">
+<h3>2.1.3. 对准和融合<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p>对准和融合相当简单。大体上来讲，需要做的只有两步，第一步是互信息对准，第二步是小波变换融合。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">registration</span> <span class="k">as</span> <span class="n">reg</span>
+<span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">fusion</span> <span class="k">as</span> <span class="n">fus</span>
+
+<span class="c"># imgA 和 imgB 分别是左右图像中对应的一对图像</span>
+<span class="n">rddB</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">mutual_information</span><span class="p">(</span><span class="n">rddB</span><span class="p">,</span> <span class="n">imgA</span><span class="p">,</span> <span class="n">imgB</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">rddA</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">rddB</span><span class="p">)</span>
+<span class="n">fused_img</span> <span class="o">=</span> <span class="n">fus</span><span class="o">.</span><span class="n">wavelet_fusion</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>2.1.4. 分割<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
+<p>分割这一步比较混乱，因为尚没有摸索出一个较好的解决方案。所以我只能给出目前效果最好的方法。首先是阈值化，然后是2D分水岭，最后聚类成3D的。这一步耗时比较长。需要耐心调试。</p>
+<div class="admonition danger">
+<p class="first admonition-title">危险</p>
+<p class="last">以下代码仅供参考。还请以实际调试为准。</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">segmentation</span> <span class="k">as</span> <span class="n">seg</span>
+<span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">preprocess</span> <span class="k">as</span> <span class="n">prep</span>
+
+<span class="c"># 首先需要减过背景的图像</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">sub_img</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="s">&#39;phansalkar&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">peak_filter</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">140</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c"># watershed</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">sub_img</span><span class="p">)</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">watershed</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="n">binary</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+<span class="c"># 聚类融合</span>
+<span class="n">prop</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">fusion</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">sub_img</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">prop</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">&quot;prop.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>2.2. 脚本样例<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">IO</span>
+<span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">preprocess</span> <span class="k">as</span> <span class="n">prep</span>
+<span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">registration</span> <span class="k">as</span> <span class="n">reg</span>
+<span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">fusion</span> <span class="k">as</span> <span class="n">fus</span>
+<span class="kn">from</span> <span class="nn">MEHI.paralleled</span> <span class="kn">import</span> <span class="n">segmentation</span> <span class="k">as</span> <span class="n">seg</span>
+<span class="kn">from</span> <span class="nn">MEHI.utils.tool</span> <span class="kn">import</span> <span class="n">exeTime</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span><span class="p">,</span> <span class="n">SparkConf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">conf</span> <span class="o">=</span> <span class="n">SparkConf</span><span class="p">()</span><span class="o">.</span><span class="n">setAppName</span><span class="p">(</span><span class="s">&#39;seg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setMaster</span><span class="p">(</span><span class="s">&#39;local[64]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;spark.executor.memory&#39;</span><span class="p">,</span><span class="s">&#39;20g&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;spark.driver.maxResultSize&#39;</span><span class="p">,</span><span class="s">&#39;20g&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;spark.driver.memory&#39;</span><span class="p">,</span><span class="s">&#39;40g&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;spark.local.dir&#39;</span><span class="p">,</span><span class="s">&#39;/dev/shm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;spark.storage.memoryFraction&#39;</span><span class="p">,</span><span class="s">&#39;0.2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;spark.default.parallelism&#39;</span><span class="p">,</span><span class="s">&#39;256&#39;</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">conf</span><span class="o">=</span><span class="n">conf</span><span class="p">)</span>
+<span class="n">pwd</span> <span class="o">=</span> <span class="s">&#39;/mnt/xfs_snode21&#39;</span>
+
+<span class="n">log</span><span class="p">(</span><span class="s">&#39;info&#39;</span><span class="p">)(</span><span class="s">&#39;load tiff ...&#39;</span><span class="p">)</span>
+<span class="n">L_img_stack</span> <span class="o">=</span> <span class="n">IO</span><span class="o">.</span><span class="n">load_tiff</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">pwd</span><span class="o">+</span><span class="s">&#39;/0401RawData/1-L-Red&#39;</span><span class="p">)</span>
+<span class="n">rddA</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">L_img_stack</span><span class="p">)</span>
+<span class="n">R_img_stack</span> <span class="o">=</span> <span class="n">IO</span><span class="o">.</span><span class="n">load_tiff</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">pwd</span><span class="o">+</span><span class="s">&#39;/0401RawData/1-R-Red&#39;</span><span class="p">)</span>
+<span class="n">rddB</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">R_img_stack</span><span class="p">)</span>
+
+<span class="n">log</span><span class="p">(</span><span class="s">&#39;info&#39;</span><span class="p">)(</span><span class="s">&#39;preprocess ...&#39;</span><span class="p">)</span>
+<span class="n">_rddA</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">intensity_normalization</span><span class="p">(</span><span class="n">rddA</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">_rddB</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">intensity_normalization</span><span class="p">(</span><span class="n">rddB</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">_rddB</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">_rddB</span><span class="p">)</span>
+<span class="n">rddB</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">rddB</span><span class="p">)</span>
+<span class="n">L_img_stack_8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_rddA</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+<span class="n">R_img_stack_8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_rddB</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+<span class="n">imgA</span> <span class="o">=</span> <span class="n">L_img_stack_8</span><span class="p">[</span><span class="mi">250</span><span class="p">]</span>
+<span class="n">imgB</span> <span class="o">=</span> <span class="n">L_img_stack_8</span><span class="p">[</span><span class="mi">250</span><span class="p">]</span>
+
+<span class="n">log</span><span class="p">(</span><span class="s">&#39;info&#39;</span><span class="p">)(</span><span class="s">&#39;registration ...&#39;</span><span class="p">)</span>
+<span class="n">rddB</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">mutual_information</span><span class="p">(</span><span class="n">rddB</span><span class="p">,</span> <span class="n">imgA</span><span class="p">,</span> <span class="n">imgB</span><span class="p">)</span>
+
+<span class="n">log</span><span class="p">(</span><span class="s">&#39;info&#39;</span><span class="p">)(</span><span class="s">&#39;fusion ...&#39;</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">rddA</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">rddB</span><span class="p">)</span>
+<span class="n">fused_img</span> <span class="o">=</span> <span class="n">fus</span><span class="o">.</span><span class="n">wavelet_fusion</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+
+<span class="n">log</span><span class="p">(</span><span class="s">&#39;info&#39;</span><span class="p">)(</span><span class="s">&#39;preprocess ...&#39;</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">fused_img</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">subtract_Background</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">intensity_normalization</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+
+<span class="n">log</span><span class="p">(</span><span class="s">&#39;info&#39;</span><span class="p">)(</span><span class="s">&#39;segmentation ... &#39;</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">peak_filter</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">140</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">sub_img</span><span class="p">)</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">watershed</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="n">binary</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="n">prop</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">fusion</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">sub_img</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">prop</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">&quot;prop.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>2.3. 参数调整<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h2>
+<p>至于数据用几个 <cite>partition</cite> 采用几个进程，请根据实际情况酌情调整。不过还有一些重要的参数需要手动设置。:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ export SPARK_MEM=80g
+$ export TMPDIR=/home/mengke/MEHI_project/mytmp
+</pre></div>
+</div>
+<p>除此之外，如果你认为spark的输出太过冗余，你可以去spark的配置文件存放目录下 <cite>spark/conf/</cite> 修改:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">log4j</span><span class="o">.</span><span class="n">rootCategory</span><span class="o">=</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">console</span>
+</pre></div>
+</div>
+<p>这样spark的输出就不会包含一些无用的 <cite>INFO</cite> 的信息</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">內容目录</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. 快速开始</a><ul>
+<li><a class="reference internal" href="#id2">2.1. 流程</a><ul>
+<li><a class="reference internal" href="#id3">2.1.1. 存取图像</a></li>
+<li><a class="reference internal" href="#id4">2.1.2. 预处理</a></li>
+<li><a class="reference internal" href="#id5">2.1.3. 对准和融合</a></li>
+<li><a class="reference internal" href="#id6">2.1.4. 分割</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">2.2. 脚本样例</a></li>
+<li><a class="reference internal" href="#id8">2.3. 参数调整</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>上一个主题</h4>
+  <p class="topless"><a href="install.html"
+                        title="上一章">1. 安装</a></p>
+  <h4>下一个主题</h4>
+  <p class="topless"><a href="preprocess.html"
+                        title="下一章">3. 预处理</a></p>
+  <div role="note" aria-label="source link">
+    <h3>本页</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/quickstart.txt"
+            rel="nofollow">显示源代码</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>快速搜索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="转向" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    输入相关的术语，模块，类或者函数名称进行搜索
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="preprocess.html" title="3. 预处理"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="1. 安装"
+             >上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; 版权所有 2015, mengke.
+      由 <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1 创建。
+    </div>
+  </body>
+</html>

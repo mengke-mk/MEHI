@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. 预处理 &mdash; MEHI 0.2 文档</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="MEHI 0.2 文档" href="index.html" />
+    <link rel="next" title="4. 对准" href="registration.html" />
+    <link rel="prev" title="2. 快速开始" href="quickstart.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="registration.html" title="4. 对准"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="2. 快速开始"
+             accesskey="P">上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="preprocess">
+<span id="id1"></span><h1>3. 预处理<a class="headerlink" href="#preprocess" title="永久链接至标题">¶</a></h1>
+<p>并行和串行的相似，所以这里以并行版的为例，基本上把并行版中的 <cite>rdd</cite> 换成 <cite>img_stack</cite> 就能当串行版的使用。</p>
+<div class="section" id="stripe-removal-rdd">
+<h2>3.1. stripe_removal(rdd)<a class="headerlink" href="#stripe-removal-rdd" title="永久链接至标题">¶</a></h2>
+<p>使用形态学的方法去除条纹，参数是内定的，会先做一次 <cite>close</cite> 在做一次 <cite>open</cite> , 16位和8位的数据都能接受。这个函数用的少，如果那天用到了，你就得去改源码了啊。输出是rdd，需要手动 <cite>collect</cite></p>
+</div>
+<div class="section" id="intensity-normalization-rdd-dtype-none">
+<h2>3.2. intensity_normalization(rdd, dtype=None)<a class="headerlink" href="#intensity-normalization-rdd-dtype-none" title="永久链接至标题">¶</a></h2>
+<p>用于调节图像的亮度，同时也拿来改变图像的位数， <cite>dtype</cite> 参数如果不设置，就只是调节一下亮度。如果设置为8或者16,则表示输出按线性缩放为8位和16位的图像。内部调用的C的实现。输出是rdd，需要手动 <cite>collect</cite> 。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">intensity_normalization</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">intensity_normalization</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="saturation-rdd-precent">
+<h2>3.3. saturation(rdd, precent)<a class="headerlink" href="#saturation-rdd-precent" title="永久链接至标题">¶</a></h2>
+<p>用于调节图像的饱和度，就是把一定比例的最亮的点和最暗的点滤掉， <cite>precent</cite> 表示需要滤掉的比例，数值在0到1之间，推荐设置为 <cite>0.01</cite> ，不过请根据实际情况来。8位16位都可以，需要手动 <cite>collect</cite> 。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">saturation</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="flip-rdd">
+<h2>3.4. flip(rdd)<a class="headerlink" href="#flip-rdd" title="永久链接至标题">¶</a></h2>
+<p>由于左右两边的图像是互为镜像的关系，所以需要对右边的图像进行翻转。直接用，输出为rdd， 需要手动 <cite>collect</cite></p>
+</div>
+<div class="section" id="invert-rdd">
+<h2>3.5. invert(rdd)<a class="headerlink" href="#invert-rdd" title="永久链接至标题">¶</a></h2>
+<p>将图像的前景部分和背景部分的像素进行一次黑白交换，某些特殊函数的前置函数。8位和16位都可以，输出为rdd</p>
+</div>
+<div class="section" id="black-tophat-rdd-size-15">
+<h2>3.6. black_tophat(rdd, size=15)<a class="headerlink" href="#black-tophat-rdd-size-15" title="永久链接至标题">¶</a></h2>
+<p>黑帽滤波，一种用于把圈状的细胞变成饼状细胞的手段，图像精度耗损很大但是运算速度很快。是基于skimage的库实现的。8位和16位的输入都可行，输出是rdd。</p>
+</div>
+<div class="section" id="subtract-background-rdd-size-12">
+<h2>3.7. subtract_Background(rdd, size=12)<a class="headerlink" href="#subtract-background-rdd-size-12" title="永久链接至标题">¶</a></h2>
+<p>原FIJI的减背景(FIJI用的java，这里改用的C++)，底层是C++的实现，单独使用可以用来去除背景的模糊，或者提取背景，和 <cite>invert()</cite> 使用，可以把圈状的细胞改变成饼状的细胞。16位和8位的输入都是可接受的。输出是rdd。size表示运算的窗口大小，依据实际情况调整。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">subtract_Background</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="shrink-rdd-shrink-size-2">
+<h2>3.8. shrink(rdd, shrink_size=2)<a class="headerlink" href="#shrink-rdd-shrink-size-2" title="永久链接至标题">¶</a></h2>
+<p>一个神奇的函数，用于对原图进行降维。比如把 <cite>2048×2048</cite> 的图像变成 <cite>1024×2014</cite> 的图像。 <cite>shrink_size</cite> 控制缩放的比例。比如 <cite>shrink_size=2</cite> 表示降维了一半，请务必保证这个值能被整除。可以接受8位或16位，输出是rdd。</p>
+</div>
+<div class="section" id="projection-img-stack-method-max">
+<h2>3.9. projection(img_stack, method=&#8217;max&#8217;)<a class="headerlink" href="#projection-img-stack-method-max" title="永久链接至标题">¶</a></h2>
+<p>投影，把一个图像栈中z轴的图像投影到一张图上，可选的method有 <cite>max</cite> <cite>min</cite> <cite>mean</cite> 三个，分别表示投影时的策略。这个函数在并行和串行中都是一个函数，输入的 <cite>img_stack</cite> 是一个 <cite>ndarray</cite> 。8位和16位都可以输入。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">projection</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="smooth-rdd-smooth-size">
+<h2>3.10. smooth(rdd, smooth_size)<a class="headerlink" href="#smooth-rdd-smooth-size" title="永久链接至标题">¶</a></h2>
+<p>用于对图像的边缘进行平滑，内部实现是一个中值滤波和一个对比度增强。注意，这个函数最好输入8位的图像，不建议输入16位的图像。 <cite>smooth_size</cite> 表示平滑时采用的圆形窗口的大小。一半设为个位数，数值越大，平滑的越厉害，有副作用，图像会比以前变得模糊，会把一些原本分开的图像连在一起，输出是rdd。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rdd</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="blockshaped-all-img-stack-nrows-ncols">
+<h2>3.11. blockshaped_all(img_stack, nrows, ncols)<a class="headerlink" href="#blockshaped-all-img-stack-nrows-ncols" title="永久链接至标题">¶</a></h2>
+<p>一个神奇的函数，这个函数直接看源码可能不太容易明白，作用是把图像裁剪成一个个小块。这个函数的并行和串行版本都是同一个函数， <cite>nrows</cite> 和 <cite>ncols</cite> 表示裁剪出的每个小块的大小，比如你要把 <cite>2048×2048</cite> 的大图裁剪成许多个 <cite>64×64</cite> 的小块，那么 <cite>nrows</cite> 和 <cite>ncols</cite> 就设置为64。输入是 <cite>ndarray</cite> 。请务必保证 <cite>nrows</cite> 和 <cite>ncols</cite> 能够被整除。输出也是 <cite>ndarray</cite></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">arr_list</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">blockshaped_all</span><span class="p">(</span><span class="n">img_stack</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="recovershape-all-img-stack-nrows-ncols">
+<h2>3.12. recovershape_all(img_stack, nrows, ncols)<a class="headerlink" href="#recovershape-all-img-stack-nrows-ncols" title="永久链接至标题">¶</a></h2>
+<p>上面那个函数的对应函数，用于把图像还原，用法和上面相同。 <cite>nrows</cite> 和 <cite>ncols</cite> 表示行和列要放置多少个小块才能还原。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">img_stack</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">blockshaped_all</span><span class="p">(</span><span class="n">arr_list</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">內容目录</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. 预处理</a><ul>
+<li><a class="reference internal" href="#stripe-removal-rdd">3.1. stripe_removal(rdd)</a></li>
+<li><a class="reference internal" href="#intensity-normalization-rdd-dtype-none">3.2. intensity_normalization(rdd, dtype=None)</a></li>
+<li><a class="reference internal" href="#saturation-rdd-precent">3.3. saturation(rdd, precent)</a></li>
+<li><a class="reference internal" href="#flip-rdd">3.4. flip(rdd)</a></li>
+<li><a class="reference internal" href="#invert-rdd">3.5. invert(rdd)</a></li>
+<li><a class="reference internal" href="#black-tophat-rdd-size-15">3.6. black_tophat(rdd, size=15)</a></li>
+<li><a class="reference internal" href="#subtract-background-rdd-size-12">3.7. subtract_Background(rdd, size=12)</a></li>
+<li><a class="reference internal" href="#shrink-rdd-shrink-size-2">3.8. shrink(rdd, shrink_size=2)</a></li>
+<li><a class="reference internal" href="#projection-img-stack-method-max">3.9. projection(img_stack, method=&#8217;max&#8217;)</a></li>
+<li><a class="reference internal" href="#smooth-rdd-smooth-size">3.10. smooth(rdd, smooth_size)</a></li>
+<li><a class="reference internal" href="#blockshaped-all-img-stack-nrows-ncols">3.11. blockshaped_all(img_stack, nrows, ncols)</a></li>
+<li><a class="reference internal" href="#recovershape-all-img-stack-nrows-ncols">3.12. recovershape_all(img_stack, nrows, ncols)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>上一个主题</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="上一章">2. 快速开始</a></p>
+  <h4>下一个主题</h4>
+  <p class="topless"><a href="registration.html"
+                        title="下一章">4. 对准</a></p>
+  <div role="note" aria-label="source link">
+    <h3>本页</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/preprocess.txt"
+            rel="nofollow">显示源代码</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>快速搜索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="转向" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    输入相关的术语，模块，类或者函数名称进行搜索
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="registration.html" title="4. 对准"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="2. 快速开始"
+             >上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; 版权所有 2015, mengke.
+      由 <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1 创建。
+    </div>
+  </body>
+</html>
