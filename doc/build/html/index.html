@@ -50,7 +50,7 @@
 <h1>MEHI 使用指南<a class="headerlink" href="#mehi" title="永久链接至标题">¶</a></h1>
 <p>MEHI是一个基于python的具有处理大规模3D时空数据能力(笑)的生物图像处理系统，其并行机制基于 <a class="reference external" href="http://spark.apache.org/">Spark1.4.1</a> ,其主要的研究对象是小鼠胚胎的心脏成像数据。</p>
 <p>MEHI包含图像处理的基本模块，比如预处理，对准，融合，分割，(追踪)，可视化。整个项目包含两个实现，一个并行版本，一个串行版本，其主要的算法支持来源于Scipy，Scikit-Image，Numpy，pandas。并采用以python搭建框架，然后C/C++来处理计算的方式，与pySpark实现的64进程并行加速，极大缩短了运行时间。</p>
-<p>这个简单的文档将告诉你如何使用MEHI这个库，API使用的注意事项，以及一些基本的例子。如果你赶时间，可以直接阅读第二章。另外，如果你在运行时发生的bug，请尽量从文档中获取支持，尤其是最后一章，列出了一些可能遇见的报错问题。顺便一说，这个文档只是一个参考，毕竟写的很仓促，一些错误是难免的。如果文档中的例子，描述和实际情况有出入，你TM来打我啊?</p>
+<p>这个简单的文档将告诉你如何使用MEHI这个库，API使用的注意事项，以及一些基本的例子。如果你赶时间，可以直接阅读第二章。另外，如果你在运行时发生的bug，请尽量从文档中获取支持，尤其是最后一章，列出了一些可能遇见的报错问题。顺便一说，这个文档只是一个参考，毕竟写的很仓促，一些错误是难免的。如果文档中的例子，描述和实际情况有出入，你来打我啊?</p>
 <p>目录:</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -86,7 +86,7 @@
 <li class="toctree-l2"><a class="reference internal" href="registration.html#p-powell-imga-imgb-vec0">4.1. p_powell(imgA, imgB ,vec0)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="registration.html#c-powell-imga-imgb-vec0-ftol-0-01">4.2. c_powell(imgA, imgB ,vec0, ftol=0.01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="registration.html#execute-rdd-vec">4.3. execute(rdd, vec)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="registration.html#mutual-information-rdd-vec-none-args">4.4. mutual_information(rdd, vec=None, *args)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="registration.html#mutual-information-rdd-vec-none">4.4. mutual_information(rdd, vec=None)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="registration.html#cross-correlation-rdd">4.5. cross_correlation(rdd)</a></li>
 </ul>
 </li>
