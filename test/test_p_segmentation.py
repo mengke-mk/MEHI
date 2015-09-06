@@ -40,4 +40,4 @@ class TestParalleledSegmentation(PySparkTestSegmentationCase):
         binary = np.array(binary)
         labeled_stack = watershed_3d(self.L_imgs, binary)
         assert (labeled_stack.shape == self.L_imgs.shape)
-        prop = properties(labeled_stack)
+        #prop = properties(labeled_stack)

@@ -19,13 +19,14 @@ execute(rdd, vec)
 -----------------
 对一个图像栈进行一次仿射变换，vec表示仿射变换的参数，这个函数一般对用户透明，输出是rdd。
 
-mutual_information(rdd, vec=None, *args)
+mutual_information(rdd, vec=None)
 ----------------------------------------
-一般使用这个函数，如果vec是给定的值，则直接对图像进行指定的仿射变换，如果不指定vec的值，则需要传入对准用的图像 `imgA` 和 `imgB` 。
+一般使用这个函数，如果vec是给定的值，则直接对图像进行指定的仿射变换，如果不指定vec的值，则需要传入对准用的图像 `imgA` 和 `imgB` 。这个函数经过curry化，当vec不为None时传入imgA或imgB，也可以人工控制迭代精度。
 
 .. code-block:: python
 
-    rdd = mutual_information(rdd, self.imgA, self.imgB)
+    rdd = mutual_information(rdd)(imgA, imgB) # Curry化
+    rdd = mutual_information(rdd)(imgA, imgB, 0.1) #控制精度
     rdd = mutual_information(rdd, [0,0,0,1,1,0,0])
 
 cross_correlation(rdd)

@@ -1,9 +1,3 @@
-################################
-# Author   : septicmk
-# Date     : 2015/09/05 16:55:11
-# FileName : IO.py
-################################
-
 import skimage.external.tifffile as tiff
 import numpy as np
 import os

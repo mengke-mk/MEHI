@@ -1,6 +1,6 @@
 ################################
 # Author   : septicmk
-# Date     : 2015/09/05 16:55:40
+# Date     : 2015/07/23 19:20:39
 # FileName : registration.py
 ################################
 
@@ -125,17 +125,15 @@ def execute(img_stack, vec):
     return np.array(map(func, img_stack))
 
 @exeTime
-def mutual_information(img_stack, vec=None, *args):
-    if vec:
-        return execute(img_stack, vec)
+def mutual_information(img_stack, vec=None):
+    if not vec:
+        def wrap(imgA, imgB, ftol=0.1):
+            vec = c_powell(imgA, imgB, [0,0,0,1,1,0,0], ftol)
+            return execute(img_stack, vec)
+        return wrap
     else:
-        if len(args) < 2:
-            raise "What the FXCK?"
-        imgA, imgB = args[0], args[1]
-        ftol = 0.1 if len(args) < 3 else args[2]
-        vec = c_powell(imgA, imgB, [0,0,0,1,1,0,0], ftol)
         return execute(img_stack, vec)
-          
+                  
 @exeTime
 def cross_correlation(img_stack):
     from skimage.feature import register_translation
