@@ -135,7 +135,7 @@
     imgB = L_img_stack_8[250]
 
     log('info')('registration ...')
-    rddB = reg.mutual_information(rddB, imgA, imgB)
+    rddB = reg.mutual_information(rddB)(imgA, imgB)
 
     log('info')('fusion ...')
     rdd = rddA.zip(rddB)
