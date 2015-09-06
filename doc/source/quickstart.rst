@@ -168,4 +168,6 @@
 
 这样spark的输出就不会包含一些无用的 `INFO` 的信息
 
+有关python中调用C的脚本参见 `blog <http://blog.septicmk.com/Python/use-Cython.html>`_ 
+
 
