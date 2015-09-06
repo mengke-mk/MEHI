@@ -145,6 +145,7 @@
     rdd = sc.parallelize(fused_img)
     rdd = prep.subtract_Background(rdd)
     rdd = prep.intensity_normalization(rdd)
+    sub_img = rdd.collect()
 
     log('info')('segmentation ... ')
     rdd = seg.peak_filter(rdd, 140)
