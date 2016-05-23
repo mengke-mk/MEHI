@@ -50,40 +50,44 @@
 <h1>8. FAQ<a class="headerlink" href="#faq" title="永久链接至标题">¶</a></h1>
 <div class="section" id="id1">
 <h2>8.1. 常见问题<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<div class="section" id="make-testimport-error">
+<h3>8.1.1. 为什么make test有import error<a class="headerlink" href="#make-testimport-error" title="永久链接至标题">¶</a></h3>
+<p>需要在make test之前先执行python setup.py,推荐用开发者模式，方便测试。</p>
+</div>
 <div class="section" id="oom">
-<h3>8.1.1. 我爆内存了怎么办(OOM)<a class="headerlink" href="#oom" title="永久链接至标题">¶</a></h3>
+<h3>8.1.2. 我爆内存了怎么办(OOM)<a class="headerlink" href="#oom" title="永久链接至标题">¶</a></h3>
 <p>首先检查配置是否正确，尤其是 <cite>$SPARK_MEM</cite> 配置是否正确。要么就减少运行时的进程个数</p>
 </div>
 <div class="section" id="fusion-2">
-<h3>8.1.2. fusion的时候报错，说必须要求是2维的<a class="headerlink" href="#fusion-2" title="永久链接至标题">¶</a></h3>
+<h3>8.1.3. fusion的时候报错，说必须要求是2维的<a class="headerlink" href="#fusion-2" title="永久链接至标题">¶</a></h3>
 <p>np.squeeze一下。或者你输出collect之后数组的shape就知道，不过这个BUG已经被修复了，估计很少遇到</p>
 </div>
 <div class="section" id="spark">
-<h3>8.1.3. spark减背景的时候，结果变得非常奇怪，而且每次运行结果不一样<a class="headerlink" href="#spark" title="永久链接至标题">¶</a></h3>
+<h3>8.1.4. spark减背景的时候，结果变得非常奇怪，而且每次运行结果不一样<a class="headerlink" href="#spark" title="永久链接至标题">¶</a></h3>
 <p>把这一步单独拿到一个脚本中做，我也不知道为什么，可能是因为C的部分浮点数的原因</p>
 </div>
 <div class="section" id="id2">
-<h3>8.1.4. 为什么阈值化得到的图像是全黑的<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<h3>8.1.5. 为什么阈值化得到的图像是全黑的<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
 <p>并不是全黑的，只有0和1两个值而已。在FIJI中查看时需要把MAX这一栏跳到最低。</p>
 </div>
 <div class="section" id="id3">
-<h3>8.1.5. 为什么分水岭之后的图灰度会不一样<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<h3>8.1.6. 为什么分水岭之后的图灰度会不一样<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
 <p>每一个灰度表示一个独立的细胞</p>
 </div>
 <div class="section" id="d">
-<h3>8.1.6. 为什么3D分水岭还没跑出结果来<a class="headerlink" href="#d" title="永久链接至标题">¶</a></h3>
+<h3>8.1.7. 为什么3D分水岭还没跑出结果来<a class="headerlink" href="#d" title="永久链接至标题">¶</a></h3>
 <p>这个耗时非常长，还是不要试了吧</p>
 </div>
 <div class="section" id="id4">
-<h3>8.1.7. 为什么阈值化效果不好<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<h3>8.1.8. 为什么阈值化效果不好<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
 <p>试试输入改用16位吧</p>
 </div>
 <div class="section" id="list">
-<h3>8.1.8. 为什么报错list没有这个属性或者方法<a class="headerlink" href="#list" title="永久链接至标题">¶</a></h3>
+<h3>8.1.9. 为什么报错list没有这个属性或者方法<a class="headerlink" href="#list" title="永久链接至标题">¶</a></h3>
 <p>本来就没有，使用np.array()把list转成array</p>
 </div>
 <div class="section" id="mhatiff">
-<h3>8.1.9. 为什么mha转tiff的脚本报错了<a class="headerlink" href="#mhatiff" title="永久链接至标题">¶</a></h3>
+<h3>8.1.10. 为什么mha转tiff的脚本报错了<a class="headerlink" href="#mhatiff" title="永久链接至标题">¶</a></h3>
 <p>估计是不识别的类型，需要人为去脚本中添加类型</p>
 </div>
 </div>
@@ -104,15 +108,16 @@
   <ul>
 <li><a class="reference internal" href="#">8. FAQ</a><ul>
 <li><a class="reference internal" href="#id1">8.1. 常见问题</a><ul>
-<li><a class="reference internal" href="#oom">8.1.1. 我爆内存了怎么办(OOM)</a></li>
-<li><a class="reference internal" href="#fusion-2">8.1.2. fusion的时候报错，说必须要求是2维的</a></li>
-<li><a class="reference internal" href="#spark">8.1.3. spark减背景的时候，结果变得非常奇怪，而且每次运行结果不一样</a></li>
-<li><a class="reference internal" href="#id2">8.1.4. 为什么阈值化得到的图像是全黑的</a></li>
-<li><a class="reference internal" href="#id3">8.1.5. 为什么分水岭之后的图灰度会不一样</a></li>
-<li><a class="reference internal" href="#d">8.1.6. 为什么3D分水岭还没跑出结果来</a></li>
-<li><a class="reference internal" href="#id4">8.1.7. 为什么阈值化效果不好</a></li>
-<li><a class="reference internal" href="#list">8.1.8. 为什么报错list没有这个属性或者方法</a></li>
-<li><a class="reference internal" href="#mhatiff">8.1.9. 为什么mha转tiff的脚本报错了</a></li>
+<li><a class="reference internal" href="#make-testimport-error">8.1.1. 为什么make test有import error</a></li>
+<li><a class="reference internal" href="#oom">8.1.2. 我爆内存了怎么办(OOM)</a></li>
+<li><a class="reference internal" href="#fusion-2">8.1.3. fusion的时候报错，说必须要求是2维的</a></li>
+<li><a class="reference internal" href="#spark">8.1.4. spark减背景的时候，结果变得非常奇怪，而且每次运行结果不一样</a></li>
+<li><a class="reference internal" href="#id2">8.1.5. 为什么阈值化得到的图像是全黑的</a></li>
+<li><a class="reference internal" href="#id3">8.1.6. 为什么分水岭之后的图灰度会不一样</a></li>
+<li><a class="reference internal" href="#d">8.1.7. 为什么3D分水岭还没跑出结果来</a></li>
+<li><a class="reference internal" href="#id4">8.1.8. 为什么阈值化效果不好</a></li>
+<li><a class="reference internal" href="#list">8.1.9. 为什么报错list没有这个属性或者方法</a></li>
+<li><a class="reference internal" href="#mhatiff">8.1.10. 为什么mha转tiff的脚本报错了</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#id5">8.2. 一些建议</a></li>
