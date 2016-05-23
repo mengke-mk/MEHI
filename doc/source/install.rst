@@ -77,7 +77,7 @@
 
 这会使得你程序的改动直接被应用到项目上来，卸载则通过::
 
-    $ python install develop --uninstall
+    $ python setup.py install develop --uninstall
 
 这时你就可以在python中导入MEHI的包了
 

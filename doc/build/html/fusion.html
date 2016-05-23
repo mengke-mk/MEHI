@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. 融合 &mdash; MEHI 0.2 文档</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="MEHI 0.2 文档" href="index.html" />
+    <link rel="next" title="6. 细胞分割" href="segmentation.html" />
+    <link rel="prev" title="4. 对准" href="registration.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="segmentation.html" title="6. 细胞分割"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="registration.html" title="4. 对准"
+             accesskey="P">上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fusion">
+<span id="id1"></span><h1>5. 融合<a class="headerlink" href="#fusion" title="永久链接至标题">¶</a></h1>
+<p>并行和串行的相似，所以这里以并行版的为例，基本上把并行版中的 <cite>rdd</cite> 换成 <cite>img_stack</cite> 就能当串行版的使用。</p>
+<p>融合只有两个函数，一个是基于局部熵的融合，一个是基于小波变换的融合。两种方法各有千秋，但是我倾向于使用小波变换融合。</p>
+<div class="section" id="content-fusion-rdd-sgm1-44-sgm2-81">
+<h2>5.1. content_fusion(rdd, sgm1=44, sgm2=81)<a class="headerlink" href="#content-fusion-rdd-sgm1-44-sgm2-81" title="永久链接至标题">¶</a></h2>
+<p>通过计算每个像素邻域的熵，并根据这个熵进行加权平均，不过论文对这个函数有一些优化，把它通过高斯卷积的方式实现了，所以 <cite>sgm1</cite> 和 <cite>sgm2</cite> 就变成两个神秘参数，定为44和81,最好不要去变，输入是一个zip过后的rdd，意义是把左右的图像一一对应的组合起来传入。可以接受8位和16位图像，输出为rdd。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rddA</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">L_img_stack</span><span class="p">)</span>
+<span class="n">rddB</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">R_img_stack</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">rddA</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">rddB</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">fus</span><span class="o">.</span><span class="n">content_fusion</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="wavelet-fusion-rdd-level-5">
+<h2>5.2. wavelet_fusion(rdd, level=5)<a class="headerlink" href="#wavelet-fusion-rdd-level-5" title="永久链接至标题">¶</a></h2>
+<p>利用一个名为pywt的库实现的小波变换融合，这个pywt库底层是由C实现的，所以效率不用担心。 <cite>level</cite> 表示小波变换的层数，并不是越多越好，论文中的建议值是5, 你也可以根据实验的出更好的值。我定义的小波融合规则是低频取平均，高频取最大值，这个是比较流行的融合规则，有优点也有缺点。你也可以尝试别的融合规则。不过我都试过了，还是这个规则好。可以接受8位或16位，输出为rdd(使用的小波分解的类型也可以尝试修改，现在是使用论文推荐的 <cite>db4</cite> 小波)。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rddA</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">L_img_stack</span><span class="p">)</span>
+<span class="n">rddB</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">R_img_stack</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">rddA</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">rddB</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">fus</span><span class="o">.</span><span class="n">wavelet_fusion</span><span class="p">(</span><span class="n">rdd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">內容目录</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. 融合</a><ul>
+<li><a class="reference internal" href="#content-fusion-rdd-sgm1-44-sgm2-81">5.1. content_fusion(rdd, sgm1=44, sgm2=81)</a></li>
+<li><a class="reference internal" href="#wavelet-fusion-rdd-level-5">5.2. wavelet_fusion(rdd, level=5)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>上一个主题</h4>
+  <p class="topless"><a href="registration.html"
+                        title="上一章">4. 对准</a></p>
+  <h4>下一个主题</h4>
+  <p class="topless"><a href="segmentation.html"
+                        title="下一章">6. 细胞分割</a></p>
+  <div role="note" aria-label="source link">
+    <h3>本页</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fusion.txt"
+            rel="nofollow">显示源代码</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>快速搜索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="转向" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    输入相关的术语，模块，类或者函数名称进行搜索
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="segmentation.html" title="6. 细胞分割"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="registration.html" title="4. 对准"
+             >上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; 版权所有 2015, mengke.
+      由 <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1 创建。
+    </div>
+  </body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. 对准 &mdash; MEHI 0.2 文档</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="MEHI 0.2 文档" href="index.html" />
+    <link rel="next" title="5. 融合" href="fusion.html" />
+    <link rel="prev" title="3. 预处理" href="preprocess.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="fusion.html" title="5. 融合"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="preprocess.html" title="3. 预处理"
+             accesskey="P">上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="registration">
+<span id="id1"></span><h1>4. 对准<a class="headerlink" href="#registration" title="永久链接至标题">¶</a></h1>
+<p>并行和串行的相似，所以这里以并行版的为例，基本上把并行版中的 <cite>rdd</cite> 换成 <cite>img_stack</cite> 就能当串行版的使用。</p>
+<p>对准中只有一个重要函数，那就是 <cite>mutual_information</cite> 表示采用互信息进行对准。其他函数都很少用到。</p>
+<div class="section" id="p-powell-imga-imgb-vec0">
+<h2>4.1. p_powell(imgA, imgB ,vec0)<a class="headerlink" href="#p-powell-imga-imgb-vec0" title="永久链接至标题">¶</a></h2>
+<p>纯python实现的powell方法，效率感人，请勿随便使用，否则一跑就是一天，研究 <cite>powell</cite> 迭代方式使用，代码是写来看的。</p>
+</div>
+<div class="section" id="c-powell-imga-imgb-vec0-ftol-0-01">
+<h2>4.2. c_powell(imgA, imgB ,vec0, ftol=0.01)<a class="headerlink" href="#c-powell-imga-imgb-vec0-ftol-0-01" title="永久链接至标题">¶</a></h2>
+<p>底层又C实现的powell方法，速度出奇的快，不过这个函数对用户是透明的，一般情况下用不到它，如果你要hack这个函数。imgA 和 imgB 表示用于对准的图像， 对准的参数有tx, <cite>tx, ty, sita, sx, sy, hx, hy</cite> 分别表示x的平移，y的平移，旋转弧度，s的缩放，y的缩放，x的剪切，y的剪切。 <cite>vec0</cite> 表示迭代开始的初始值。ftol表示最低可接受的精度，由于像素是离散的，所以这个精度太高到亚像素级也是没用的，0.1 0.01 就够了。</p>
+</div>
+<div class="section" id="execute-rdd-vec">
+<h2>4.3. execute(rdd, vec)<a class="headerlink" href="#execute-rdd-vec" title="永久链接至标题">¶</a></h2>
+<p>对一个图像栈进行一次仿射变换，vec表示仿射变换的参数，这个函数一般对用户透明，输出是rdd。</p>
+</div>
+<div class="section" id="mutual-information-rdd-vec-none">
+<h2>4.4. mutual_information(rdd, vec=None)<a class="headerlink" href="#mutual-information-rdd-vec-none" title="永久链接至标题">¶</a></h2>
+<p>一般使用这个函数，如果vec是给定的值，则直接对图像进行指定的仿射变换，如果不指定vec的值，则需要传入对准用的图像 <cite>imgA</cite> 和 <cite>imgB</cite> 。这个函数经过curry化，当vec不为None时传入imgA或imgB，也可以人工控制迭代精度。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rdd</span> <span class="o">=</span> <span class="n">mutual_information</span><span class="p">(</span><span class="n">rdd</span><span class="p">)(</span><span class="n">imgA</span><span class="p">,</span> <span class="n">imgB</span><span class="p">)</span> <span class="c"># Curry化</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">mutual_information</span><span class="p">(</span><span class="n">rdd</span><span class="p">)(</span><span class="n">imgA</span><span class="p">,</span> <span class="n">imgB</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span> <span class="c">#控制精度</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">mutual_information</span><span class="p">(</span><span class="n">rdd</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cross-correlation-rdd">
+<h2>4.5. cross_correlation(rdd)<a class="headerlink" href="#cross-correlation-rdd" title="永久链接至标题">¶</a></h2>
+<p>互相关对准，实验性质的实现，效果并不好，只能计算出一个x平移和y平移，不过速度很快。要实际使用这个函数内部还得修改。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">內容目录</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. 对准</a><ul>
+<li><a class="reference internal" href="#p-powell-imga-imgb-vec0">4.1. p_powell(imgA, imgB ,vec0)</a></li>
+<li><a class="reference internal" href="#c-powell-imga-imgb-vec0-ftol-0-01">4.2. c_powell(imgA, imgB ,vec0, ftol=0.01)</a></li>
+<li><a class="reference internal" href="#execute-rdd-vec">4.3. execute(rdd, vec)</a></li>
+<li><a class="reference internal" href="#mutual-information-rdd-vec-none">4.4. mutual_information(rdd, vec=None)</a></li>
+<li><a class="reference internal" href="#cross-correlation-rdd">4.5. cross_correlation(rdd)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>上一个主题</h4>
+  <p class="topless"><a href="preprocess.html"
+                        title="上一章">3. 预处理</a></p>
+  <h4>下一个主题</h4>
+  <p class="topless"><a href="fusion.html"
+                        title="下一章">5. 融合</a></p>
+  <div role="note" aria-label="source link">
+    <h3>本页</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/registration.txt"
+            rel="nofollow">显示源代码</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>快速搜索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="转向" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    输入相关的术语，模块，类或者函数名称进行搜索
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="fusion.html" title="5. 融合"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="preprocess.html" title="3. 预处理"
+             >上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MEHI 0.2 文档</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; 版权所有 2015, mengke.
+      由 <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1 创建。
+    </div>
+  </body>
+</html>
