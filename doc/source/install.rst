@@ -7,7 +7,7 @@
 依赖
 ----
 
-* python>=2.7.6
+* python>=2.7.10 
 * pip 
 * gcc/g++
 * Cython>=0.22.1
@@ -60,7 +60,7 @@
 
     $ make clean
 
-另外，我还使用nose编写了一些单元测试，可以供你检测环境是否部署正确。::
+另外，我还使用nose编写了一些单元测试，可以供你检测环境是否部署正确。(需要先安装)::
 
     $ make test
 
@@ -73,7 +73,7 @@
 ----------
 我推荐的安装方式是使用开发者模式安装即::
 
-    $ python install develop
+    $ python setup.py install develop
 
 这会使得你程序的改动直接被应用到项目上来，卸载则通过::
 
